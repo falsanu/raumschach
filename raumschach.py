@@ -1,156 +1,147 @@
 import pygame
 from pygame.locals import *
+from utilities.matrix_helpers import *
+from utilities.colors import *
+from entities.Box import Box
+from settings import *
+import os
+
 
 import numpy as np
 
-pygame.init()
-screen = pygame.display.set_mode((640,480))
-SCREEN_WIDTH = screen.get_width()
-SCREEN_HEIGHT = screen.get_height()
-FOV= 100
-DISTANCE = 2
-LINE_WIDTH = 1
+# Pfad zu den Homebrew-SDL2-Bibliotheken setzen
+os.environ['PATH'] = '/opt/homebrew/bin:' + os.environ.get('PATH', '')
+os.environ['DYLD_FALLBACK_LIBRARY_PATH'] = '/opt/homebrew/lib'
 
-WHITE = (255, 255, 255)
-RED = (255, 100, 100)
-GREEN = (0, 255, 0)
+print(pygame.get_sdl_version())  # Sollte die SDL-Version ausgeben
+print(pygame.font.get_init())    # Sollte True ausgeben
+pygame.init()
+
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.get_surface().set_alpha(None)  # Alpha-Blending einschalten
+
+
 
 fpsClock = pygame.time.Clock() #1
 
-points = []
-points.append(pygame.math.Vector3(-1,-1,-1))
-points.append(pygame.math.Vector3(-1,1,-1))
-points.append(pygame.math.Vector3(1,1,-1))
-points.append(pygame.math.Vector3(1, -1, -1))    
 
-points.append(pygame.math.Vector3(-1, 1, 1))
-points.append(pygame.math.Vector3(1, 1, 1))
-points.append(pygame.math.Vector3(1, -1, 1))
-points.append(pygame.math.Vector3(-1,-1 ,1))
+rows = ROWS # front back
+level = LEVEL # up - down
+cols = COLUMNS # left - right
 
 
+size = SIZE
 
-import math
+# 3D-Array mit None initialisieren
+board = [[[None for _ in range(rows)]
+             for _ in range(level)]
+            for _ in range(cols)]
 
-def rotation_matrix_x(angle):
-    # Angle in Radians
-    cos_a = math.cos(angle)
-    sin_a = math.sin(angle)
-    return [
-        [1,    0,      0],
-        [0,    cos_a, -sin_a],
-        [0,    sin_a,  cos_a]
-    ]
+# Mittelpunkt des Boards berechnen
+center_x = (cols - 1) / 2  # Mitte der Spalten (X-Achse)
+center_y = (level - 1) / 2  # Mitte der Ebenen (Y-Achse)
+center_z = (rows - 1) / 2   # Mitte der Reihen (Z-Achse)
 
-def rotation_matrix_y(angle):
-    cos_a = math.cos(angle)
-    sin_a = math.sin(angle)
-    return [
-        [cos_a,  0,    sin_a],
-        [0,      1,    0],
-        [-sin_a, 0,    cos_a]
-    ]
+box_counter = 0
+# Befüllen des Boards mit Box-Objekten
+for z in range(rows):
+    for y in range(level):
+        for x in range(cols):
+            box_counter+=1 
+            color = pygame.Color(0)  # Erstelle ein Color-Objekt (Farbe ist zunächst irrelevant)
+            color.hsva = ((y * 360 // level) % 360, 100, 100, 50)  # Setze HSV-Werte (Hue, Saturation, Value, Alpha)
+            
+             # Offset relativ zum Mittelpunkt
+            offset_x = x - center_x
+            offset_y = (y - center_y) * (size + Y_SPACING)/size
+            offset_z = z - center_z
 
-def rotation_matrix_z(angle):
-    cos_a = math.cos(angle)
-    sin_a = math.sin(angle)
-    return [
-        [cos_a, -sin_a, 0],
-        [sin_a,  cos_a, 0],
-        [0,      0,     1]
-    ]
-
-def multiply_matrix_vector(matrix, vector):
-    x = matrix[0][0] * vector.x + matrix[0][1] * vector.y + matrix[0][2] * vector.z
-    y = matrix[1][0] * vector.x + matrix[1][1] * vector.y + matrix[1][2] * vector.z
-    z = matrix[2][0] * vector.x + matrix[2][1] * vector.y + matrix[2][2] * vector.z
-    return pygame.math.Vector3(x, y, z)
+            board[z][y][x] = Box(offset_x, offset_y, offset_z, size, color, pygame.math.Vector3(x,y,z))
 
 
-def rotate_point(point, angles):
-    # angles = (x_angle, y_angle, z_angle) in Radians
-    matrix_x = rotation_matrix_x(angles[0])
-    matrix_y = rotation_matrix_y(angles[1])
-    matrix_z = rotation_matrix_z(angles[2])
-
-    # Rotationsreihenfolge: Z → Y → X
-    rotated = multiply_matrix_vector(matrix_z, point)
-    rotated = multiply_matrix_vector(matrix_y, rotated)
-    rotated = multiply_matrix_vector(matrix_x, rotated)
-    return rotated
-
-
-edges = [
-    (0, 1), (1, 2), (2, 3), (3, 0),  # Vorderseite
-    (4, 5), (5, 6), (6, 7), (7, 4),  # Rückseite
-    (0, 7), (1, 4), (2, 5), (3, 6)   # Verbindungen
-]
-
-
-
-def project_3d_to_2d(point_3d, screen_width, screen_height, fov, viewer_distance):
-    # point_3d: (x, y, z)
-    # fov: Field of View (z. B. 90 Grad)
-    # viewer_distance: Abstand des "Auges" zur Projektionsebene
-    factor = fov / (viewer_distance + point_3d.z)
-    x = point_3d.x * factor + screen_width // 2
-    y = point_3d.y * factor + screen_height // 2
-    return pygame.math.Vector2(x, y)
 
 
 counter = 0
-angles = [0, 0, 0]  # [x_angle, y_angle, z_angle] in Radians
+# Isometrische Winkel (X, Y, Z in Radians)
+angles = [
+    math.radians(30),  # X-Achse: 30° nach unten geneigt
+    math.radians(45),  # Y-Achse: 45° gedreht
+    0                  # Z-Achse: keine Rotation
+]
 mousedown = False
+font_path = "/System/Library/Fonts/Geneva.ttf"  # macOS
+font = pygame.font.Font(font_path, 14)
+
+
+shift_pressed = False
+
 while True:
     event = pygame.event.poll()
     screen.fill((0,0,0))
 
     
-    pygame.mouse.get_pos()
+    
     if event.type == pygame.QUIT:
         pygame.quit()
         exit
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_ESCAPE:
-            pygame.quit()
-            exit
+            angles = [
+                math.radians(30),  # X-Achse: 30° nach unten geneigt
+                math.radians(45),  # Y-Achse: 45° gedreht
+                0                  # Z-Achse: keine Rotation
+            ]
+        if event.key == pygame.K_LSHIFT:
+            shift_pressed = True
+    if event.type == pygame.KEYUP:
+        if event.key == pygame.K_LSHIFT:
+            shift_pressed = False
+    
     if event.type == MOUSEWHEEL:
-        DISTANCE+=event.y
+        if shift_pressed:
+            FOV += event.y
+        else:
+            DISTANCE+=event.y
 
     if event.type == MOUSEBUTTONDOWN:
         mousedown = True
+        last_mouse_pos = pygame.mouse.get_pos()  # Startposition speichern
+
     if event.type == MOUSEBUTTONUP:
         mousedown = False
-        print(mousedown)
-        
-        #angels = [event.x, event.y, 0]
-
-    if mousedown:
-        mousepos = pygame.mouse.get_pos()
-        print(math.radians(mousepos[0]))
-        angles = [math.radians(mousepos[1]), math.radians(mousepos[0]), 0]
-    
-    
-    #angles[0] += 0.01  # X-Achse
-    #angles[1] += 0.02  # Y-Achse
-    # Alle Punkte rotieren
-    rotated_points = [rotate_point(p, angles) for p in points]
-    projected_points = [project_3d_to_2d(p, SCREEN_WIDTH, SCREEN_HEIGHT, FOV, DISTANCE) for p in rotated_points]
-    
+        last_mouse_pos = None  # Zurücksetzen, wenn die Maustaste losgelassen wird
 
 
-# The magic happens here
-    for point in projected_points:
-        pygame.draw.circle(screen, WHITE, (point.x, point.y), 3)
-       
-    # Zeichne alle Kanten
-    for start_idx, end_idx in edges:
-        start = projected_points[start_idx]
-        end = projected_points[end_idx]
-        pygame.draw.line(screen, (255, 255, 255), start, end, 1)
+    if mousedown and last_mouse_pos is not None:
+        current_mouse_pos = pygame.mouse.get_pos()
+        delta_x = current_mouse_pos[0] - last_mouse_pos[0]
+        angles[1] += math.radians(delta_x * -0.2)  # Flüssige Rotation basierend auf Mausbewegung
+        last_mouse_pos = current_mouse_pos  # Aktuelle Position speichern
+
+    # if mousedown:
+    #     mousepos = pygame.mouse.get_pos()
+    #     # Nur die Y-Achse (angles[1]) mit der Maus steuern (X-Mausposition)
+    #     angles[1] = math.radians(mousepos[0] * -0.5)  # Skalierung für langsamere Rotation
     
+
+    # Befüllen mit Box-Objekten
+    for z in range(rows):
+        for y in range(level):
+            for x in range(cols):
+                box = board[z][y][x]
+                box.draw(screen, FOV, DISTANCE, angles)
+                
     
+    fps = int(fpsClock.get_fps())
+    fps_text = font.render(f"FPS: {fps}, FOV: {FOV}, DISTANCE: {DISTANCE}, ROT_X:{int(angles[0])}, ROT_Y:{int(angles[1])}", True, (255, 255, 255))
+    screen.blit(fps_text, (10, 10))  # Oben links
+    
+    mouse_x,mouse_y = pygame.mouse.get_pos()
+    mouse_text = font.render(f"Mouse_X: {mouse_x}, Mouse_Y: {mouse_y}", True, (255, 255, 255))
+    screen.blit(mouse_text, (10, 30))  # Oben links
     pygame.display.update()      
     fpsClock.tick(60) #11
 
 pygame.quit()
+
+

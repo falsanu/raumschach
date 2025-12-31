@@ -1,0 +1,12 @@
+SCREEN_WIDTH = 1500
+SCREEN_HEIGHT = 900
+FOV= 1500
+DISTANCE = 1000
+LINE_WIDTH = 1
+
+ROWS = 8 # front back
+LEVEL = 4 # up - down
+COLUMNS = 8 # left - right
+
+SIZE = 30
+Y_SPACING = 20
