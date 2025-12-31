@@ -4,6 +4,7 @@ from utilities.matrix_helpers import *
 from utilities.colors import *
 from entities.Box import Box
 from settings import *
+from entities.figures.pawn import Pawn
 import os
 
 
@@ -49,12 +50,12 @@ for z in range(rows):
         for x in range(cols):
             box_counter+=1 
             color = pygame.Color(0)  # Erstelle ein Color-Objekt (Farbe ist zunächst irrelevant)
-            color.hsva = ((y * 360 // level) % 360, 100, 100, 50)  # Setze HSV-Werte (Hue, Saturation, Value, Alpha)
+            color.hsva = ((y * 360 // level) % 360, 10, 10, 50)  # Setze HSV-Werte (Hue, Saturation, Value, Alpha)
             
              # Offset relativ zum Mittelpunkt
-            offset_x = x - center_x
-            offset_y = (y - center_y) * (size + Y_SPACING)/size
-            offset_z = z - center_z
+            offset_x = (x - center_x) * (size + BOX_SPACING)/size
+            offset_y = (y - center_y) * ((size + BOX_SPACING)/size) * (size + Y_SPACING)/size
+            offset_z = (z - center_z) * (size + BOX_SPACING)/size
 
             board[z][y][x] = Box(offset_x, offset_y, offset_z, size, color, pygame.math.Vector3(x,y,z))
 
@@ -74,6 +75,9 @@ font = pygame.font.Font(font_path, 14)
 
 
 shift_pressed = False
+pawn = Pawn(board, board[1][4][4])
+pawn.show_possible_target_fields()
+pawn.show_possible_hit_fields()
 
 while True:
     event = pygame.event.poll()
@@ -118,11 +122,6 @@ while True:
         angles[1] += math.radians(delta_x * -0.2)  # Flüssige Rotation basierend auf Mausbewegung
         last_mouse_pos = current_mouse_pos  # Aktuelle Position speichern
 
-    # if mousedown:
-    #     mousepos = pygame.mouse.get_pos()
-    #     # Nur die Y-Achse (angles[1]) mit der Maus steuern (X-Mausposition)
-    #     angles[1] = math.radians(mousepos[0] * -0.5)  # Skalierung für langsamere Rotation
-    
 
     # Befüllen mit Box-Objekten
     for z in range(rows):

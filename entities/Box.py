@@ -23,6 +23,8 @@ class Box:
 
         self.orig_vector = orig_vector
 
+
+
         self.offset = pygame.math.Vector3(x, y, z)
         self.size = size
         self.edges = [
@@ -34,6 +36,8 @@ class Box:
         
         font_path = "/System/Library/Fonts/Geneva.ttf"  # macOS
         self.font = pygame.font.Font(font_path, 10)
+
+        self.is_highlighted = False
 
 
 
@@ -55,6 +59,10 @@ class Box:
         center_3d /= len(projected)  # Durchschnitt aller Eckpunkte
         return center_3d
     
+    def highlight(self, color):
+        self.is_highlighted = True
+        self.color = color
+
     def draw(self, screen, fov, distance, angles):
         # 1. Punkte rotieren und projizieren
         rotated_points = [rotate_point(p, angles) for p in self.get_projected_vertices()]
@@ -95,8 +103,8 @@ class Box:
             (255, 255, 255)
         )
         # 3. Zeichne den Text auf das transparente Surface
-        text_surface.blit(box_text, (0, 0))
-        text_surface.set_alpha(128)  # 10 = ~4% Transparenz (0=unsichtbar, 255=undurchsichtig)
+        # text_surface.blit(box_text, (0, 0))
+        # text_surface.set_alpha(128)  # 10 = ~4% Transparenz (0=unsichtbar, 255=undurchsichtig)
 
-        text_rect = text_surface.get_rect(center=(int(projected_center.x), int(projected_center.y)))
-        screen.blit(text_surface, text_rect)
+        # text_rect = text_surface.get_rect(center=(int(projected_center.x), int(projected_center.y)))
+        # screen.blit(text_surface, text_rect)

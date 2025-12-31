@@ -5,8 +5,9 @@ DISTANCE = 1000
 LINE_WIDTH = 1
 
 ROWS = 8 # front back
-LEVEL = 4 # up - down
+LEVEL = 8 # up - down
 COLUMNS = 8 # left - right
 
-SIZE = 30
-Y_SPACING = 20
+SIZE = 15
+Y_SPACING = 0
+BOX_SPACING = 1
