@@ -3,14 +3,21 @@ a 3d chess game
 
 ## todo:
 
-- generate 3 projection
-- generate board
-
+- [x] generate 3d projection
+- [x] generate board
+- [x] display possible fields
+- [ ] create figures 
+  - [x] Pawn
+  - [x] King
+  - [ ] Queen
+  - [ ] Bishop
+  - [ ] Knight
+  
 Choose wisely:
-
-- create figures 
-- make moves
-- display possible fields
-- select single field
+- [ ] create Teams
+- [ ] create inital setup
+- [ ] select single field
+- [ ] make moves
+- [ ] hit opponents figures
  
  

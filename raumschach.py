@@ -2,92 +2,62 @@ import pygame
 from pygame.locals import *
 from utilities.matrix_helpers import *
 from utilities.colors import *
-from entities.Box import Box
 from settings import *
-from entities.figures.pawn import Pawn
+from entities.board import Board
 import os
 
 
 import numpy as np
 
-# Pfad zu den Homebrew-SDL2-Bibliotheken setzen
-os.environ['PATH'] = '/opt/homebrew/bin:' + os.environ.get('PATH', '')
-os.environ['DYLD_FALLBACK_LIBRARY_PATH'] = '/opt/homebrew/lib'
+# #
+# FONT Handling
+# #
 
-print(pygame.get_sdl_version())  # Sollte die SDL-Version ausgeben
-print(pygame.font.get_init())    # Sollte True ausgeben
+# Pfad zu den Homebrew-SDL2-Bibliotheken setzen
+# os.environ['PATH'] = '/opt/homebrew/bin:' + os.environ.get('PATH', '')
+# os.environ['DYLD_FALLBACK_LIBRARY_PATH'] = '/opt/homebrew/lib'
+
+
+# #
+# Pygame initialization
+# #
+
+
 pygame.init()
+font_path = "/System/Library/Fonts/Geneva.ttf"  # macOS
+font = pygame.font.Font(font_path, 14)
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.get_surface().set_alpha(None)  # Alpha-Blending einschalten
 
-
-
 fpsClock = pygame.time.Clock() #1
 
-
-rows = ROWS # front back
-level = LEVEL # up - down
-cols = COLUMNS # left - right
+# Board erstellen und befüllen
+board = Board(ROWS, LEVEL, COLUMNS)
 
 
-size = SIZE
-
-# 3D-Array mit None initialisieren
-board = [[[None for _ in range(rows)]
-             for _ in range(level)]
-            for _ in range(cols)]
-
-# Mittelpunkt des Boards berechnen
-center_x = (cols - 1) / 2  # Mitte der Spalten (X-Achse)
-center_y = (level - 1) / 2  # Mitte der Ebenen (Y-Achse)
-center_z = (rows - 1) / 2   # Mitte der Reihen (Z-Achse)
-
-box_counter = 0
-# Befüllen des Boards mit Box-Objekten
-for z in range(rows):
-    for y in range(level):
-        for x in range(cols):
-            box_counter+=1 
-            color = pygame.Color(0)  # Erstelle ein Color-Objekt (Farbe ist zunächst irrelevant)
-            color.hsva = ((y * 360 // level) % 360, 10, 10, 50)  # Setze HSV-Werte (Hue, Saturation, Value, Alpha)
-            
-             # Offset relativ zum Mittelpunkt
-            offset_x = (x - center_x) * (size + BOX_SPACING)/size
-            offset_y = (y - center_y) * ((size + BOX_SPACING)/size) * (size + Y_SPACING)/size
-            offset_z = (z - center_z) * (size + BOX_SPACING)/size
-
-            board[z][y][x] = Box(offset_x, offset_y, offset_z, size, color, pygame.math.Vector3(x,y,z))
-
-
-
-
-counter = 0
 # Isometrische Winkel (X, Y, Z in Radians)
 angles = [
     math.radians(30),  # X-Achse: 30° nach unten geneigt
     math.radians(45),  # Y-Achse: 45° gedreht
     0                  # Z-Achse: keine Rotation
 ]
+
+
+# #
+# Key Flag Initialisierung
+# #
 mousedown = False
-font_path = "/System/Library/Fonts/Geneva.ttf"  # macOS
-font = pygame.font.Font(font_path, 14)
-
-
 shift_pressed = False
-pawn = Pawn(board, board[1][4][4])
-pawn.show_possible_target_fields()
-pawn.show_possible_hit_fields()
 
 while True:
     event = pygame.event.poll()
     screen.fill((0,0,0))
-
-    
     
     if event.type == pygame.QUIT:
         pygame.quit()
         exit
+    
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_ESCAPE:
             angles = [
@@ -97,10 +67,62 @@ while True:
             ]
         if event.key == pygame.K_LSHIFT:
             shift_pressed = True
+    
     if event.type == pygame.KEYUP:
         if event.key == pygame.K_LSHIFT:
             shift_pressed = False
-    
+
+        if event.key == pygame.K_d:
+            x,y,z = board.active_box
+            x+=1
+            if x > board.columns -1:
+                x = 0
+            
+            board.active_box.x = x
+            
+        if event.key == pygame.K_a:
+            x,y,z = board.active_box
+            x-=1
+            if x < 0:
+                x = board.columns - 1
+            board.active_box.x = x
+
+        if event.key == pygame.K_s:
+            x,y,z = board.active_box
+            z-=1
+            if z < 0:
+                z = board.rows - 1
+            board.active_box.z = z
+
+        if event.key == pygame.K_w:
+            x,y,z = board.active_box
+            z+=1
+            if z > board.rows - 1:
+                z = 0
+            board.active_box.z = z
+        
+        if event.key == pygame.K_e:
+            x,y,z = board.active_box
+            y+=1
+            if y > board.level - 1:
+                y = 0
+            board.active_box.y = y
+        
+        if event.key == pygame.K_q:
+            x,y,z = board.active_box
+            y-=1
+            if y < 0:
+                y = board.level -1
+            board.active_box.y = y
+        if event.key == pygame.K_SPACE:
+            print("SPACE")
+            board.set_selected_box(board.active_box)
+            
+
+    # # 
+    # Mouse-Handling
+    # #
+
     if event.type == MOUSEWHEEL:
         if shift_pressed:
             FOV += event.y
@@ -119,16 +141,22 @@ while True:
     if mousedown and last_mouse_pos is not None:
         current_mouse_pos = pygame.mouse.get_pos()
         delta_x = current_mouse_pos[0] - last_mouse_pos[0]
-        angles[1] += math.radians(delta_x * -0.2)  # Flüssige Rotation basierend auf Mausbewegung
+        angles[1] += math.radians(delta_x * -0.3)  # Flüssige Rotation basierend auf Mausbewegung
         last_mouse_pos = current_mouse_pos  # Aktuelle Position speichern
 
-
+    
+    # active_x, active_y, active_z = active_box
+    board.draw(screen, angles)
     # Befüllen mit Box-Objekten
-    for z in range(rows):
-        for y in range(level):
-            for x in range(cols):
-                box = board[z][y][x]
-                box.draw(screen, FOV, DISTANCE, angles)
+    # for z in range(ROWS):
+    #     for y in range(LEVEL):
+    #         for x in range(COLUMNS):
+
+    #             box = board[z][y][x]
+    #             box.is_active = False
+    #             if active_x == x and active_y == y and active_z == z:
+    #                 box.is_active = True
+    #             box.draw(screen, FOV, DISTANCE, angles)
                 
     
     fps = int(fpsClock.get_fps())

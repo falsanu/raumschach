@@ -3,13 +3,13 @@ from utilities.matrix_helpers import *
 from utilities.colors import *
 from utilities.tools import *
 from settings import *
-
+from entities.figures.figure import Figure
 
 class Box:
     """
     Box which defines one three dimensional box
     """
-    def __init__(self, x, y, z, size, color, orig_vector):
+    def __init__(self, x, y, z, size, color, orig_vector, figure=None):
         self.points = []
         self.points.append(pygame.math.Vector3(-(size),-(size),-(size)))
         self.points.append(pygame.math.Vector3(-(size),(size),-(size)))
@@ -22,7 +22,7 @@ class Box:
         self.points.append(pygame.math.Vector3(-(size),-(size) ,(size)))
 
         self.orig_vector = orig_vector
-
+        self.figure:Figure = figure
 
 
         self.offset = pygame.math.Vector3(x, y, z)
@@ -33,13 +33,18 @@ class Box:
             (0, 7), (1, 4), (2, 5), (3, 6)   # Verbindungen
         ]
         self.color = color
+        self.initial_color = color
+        self.is_active = False
         
         font_path = "/System/Library/Fonts/Geneva.ttf"  # macOS
         self.font = pygame.font.Font(font_path, 10)
 
         self.is_highlighted = False
 
-
+    def set_figure(self, figure):
+        self.figure = figure
+    
+    
 
     def get_projected_vertices(self):
         projected = []
@@ -62,6 +67,10 @@ class Box:
     def highlight(self, color):
         self.is_highlighted = True
         self.color = color
+    
+    def un_highlight(self):
+        self.is_highlighted = False
+        self.color = self.initial_color
 
     def draw(self, screen, fov, distance, angles):
         # 1. Punkte rotieren und projizieren
@@ -75,7 +84,10 @@ class Box:
         for start_idx, end_idx in self.edges:
             start = projected_points[start_idx]
             end = projected_points[end_idx]
-            pygame.draw.line(screen, self.color, (start.x, start.y), (end.x, end.y), 1)
+            if self.is_active:
+                pygame.draw.line(screen, WHITE, (start.x, start.y), (end.x, end.y), 1)
+            else:
+                pygame.draw.line(screen, self.color, (start.x, start.y), (end.x, end.y), 1)
 
         # 3. Mittelpunkt im 3D-Raum berechnen (vor der Projektion!)
         center_3d = pygame.math.Vector3(0, 0, 0)
