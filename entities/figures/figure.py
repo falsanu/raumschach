@@ -1,6 +1,8 @@
 import pygame
 from settings import *
-class Figure:
+from abc import ABC, abstractmethod
+
+class Figure(ABC):
     def __init__(self, board, box, team):
         self.board:Board = board
         self.box = box
@@ -16,15 +18,19 @@ class Figure:
         if self.team == TEAM_BLACK:
             self.box.highlight((255,0,255))
 
+    @abstractmethod
+    def get_target_fields(self):
+        pass
+
     def show_possible_target_fields(self):
-        for x,y,z in self.movement_vector:
+        for x,y,z in self.get_target_fields():
             x,y,z = pygame.math.Vector3(x,y,z) + self.box.orig_vector
             if (x >= 0 and x < self.board.columns) and (y >= 0 and y < self.board.level) and (z >= 0 and z < self.board.rows):
                 if self.board.board[int(z)][int(y)][int(x)] != self.box:
                     self.board.board[int(z)][int(y)][int(x)].highlight((0,255,0))
     
     def hide_possible_target_fields(self):
-        for x,y,z in self.movement_vector:
+        for x,y,z in self.get_target_fields():
             x,y,z = pygame.math.Vector3(x,y,z) + self.box.orig_vector
             if (x >= 0 and x < self.board.columns) and (y >= 0 and y < self.board.level) and (z >= 0 and z < self.board.rows):
                 if self.board.board[int(z)][int(y)][int(x)] != self.box:

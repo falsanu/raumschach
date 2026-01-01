@@ -43,3 +43,5 @@ class Pawn(Figure):
         self.label = "P"
         self.highlight_box()
     
+    def get_target_fields(self):
+            return self.hit_vector

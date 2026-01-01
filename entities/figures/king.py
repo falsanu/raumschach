@@ -43,5 +43,7 @@ class King(Figure):
         
         self.label = "K"
         self.highlight_box()
-    
-    
+
+        
+    def get_target_fields(self):
+            return self.hit_vector
