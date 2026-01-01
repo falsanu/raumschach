@@ -3,6 +3,7 @@ from entities.box import Box
 from entities.team import Team
 from entities.figures.pawn import Pawn
 from entities.figures.king import King
+from entities.figures.knight import Knight
 
 from settings import *
 
@@ -96,4 +97,8 @@ class Board:
         King(self, self.board[0][3][3], TEAM_WHITE)
         King(self, self.board[7][3][3], TEAM_BLACK)
         
-                    
+        knight = Knight(self, self.board[0][3][1], team_white)
+        knight = Knight(self, self.board[0][3][6], team_white)
+        knight = Knight(self, self.board[7][3][1], team_black)
+        knight = Knight(self, self.board[7][3][6], team_black)            
+        
