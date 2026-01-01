@@ -11,8 +11,7 @@ from entities.board import Board
 # #
 
 pygame.init()
-font_path = "/System/Library/Fonts/Geneva.ttf"  # macOS
-font = pygame.font.Font(font_path, 14)
+font = pygame.font.SysFont("Arial", 10)
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.get_surface().set_alpha(None)  # Alpha-Blending einschalten

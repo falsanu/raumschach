@@ -36,8 +36,8 @@ class Box:
         self.initial_color = color
         self.is_active = False
         
-        font_path = "/System/Library/Fonts/Geneva.ttf"  # macOS
-        self.font = pygame.font.Font(font_path, 10)
+        
+        self.font = pygame.font.SysFont("Arial", 10)
 
         self.is_highlighted = False
 
