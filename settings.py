@@ -4,9 +4,9 @@ FOV= 1500
 DISTANCE = 1000
 LINE_WIDTH = 1
 
-ROWS = 8 # front back
-LEVEL = 8 # up - down
-COLUMNS = 8 # left - right
+ROWS = 8 # front back           Z
+LEVEL = 8 # up - down           Y
+COLUMNS = 8 # left - right      X
 
 SIZE = 15
 Y_SPACING = 0

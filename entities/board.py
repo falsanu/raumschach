@@ -27,9 +27,9 @@ class Board:
         self.center = (center_x, center_y, center_z)
 
         # Befüllen des Boards mit Box-Objekten
-        for z in range(self.rows):
-            for y in range(self.level):
-                for x in range(self.columns):
+        for z in range(self.rows): #                  Z von vorne nach hinten
+            for y in range(self.level): #Oben         Y von unten nach oben
+                for x in range(self.columns):       # X von links nach rechts
                     color = pygame.Color(0)  # Erstelle ein Color-Objekt (Farbe ist zunächst irrelevant)
                     color.hsva = ((y * 360 // self.level) % 360, 100, 40, 50)  # Setze HSV-Werte (Hue, Saturation, Value, Alpha)
                     
@@ -75,7 +75,7 @@ class Board:
     def init_figures(self):
         team_white = Team(TEAM_WHITE)
         team_black = Team(TEAM_BLACK)
-
+#                                   'z''y''x'
         pawn = Pawn(self, self.board[1][3][0], team_white)
         pawn = Pawn(self, self.board[1][3][1], team_white)
         pawn = Pawn(self, self.board[1][3][2], team_white)
