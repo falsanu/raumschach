@@ -1,8 +1,7 @@
 import pygame
-from entities.team import Team
-
+from settings import *
 class Figure:
-    def __init__(self, board, box, team:Team):
+    def __init__(self, board, box, team):
         self.board:Board = board
         self.box = box
         self.box.figure = self
@@ -12,7 +11,10 @@ class Figure:
     
 
     def highlight_box(self):
-        self.box.highlight((255,0,0))
+        if self.team == TEAM_WHITE:
+            self.box.highlight((255,255,0))
+        if self.team == TEAM_BLACK:
+            self.box.highlight((255,0,255))
 
     def show_possible_target_fields(self):
         for x,y,z in self.movement_vector:
