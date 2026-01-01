@@ -1,10 +1,12 @@
 import pygame
+from entities.team import Team
 
 class Figure:
-    def __init__(self, board, box):
+    def __init__(self, board, box, team:Team):
         self.board:Board = board
         self.box = box
         self.box.figure = self
+        self.team = team
         self.movement_vector = []
         self.hit_vector = []
     

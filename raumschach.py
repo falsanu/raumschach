@@ -4,24 +4,11 @@ from utilities.matrix_helpers import *
 from utilities.colors import *
 from settings import *
 from entities.board import Board
-import os
-
-
-import numpy as np
-
-# #
-# FONT Handling
-# #
-
-# Pfad zu den Homebrew-SDL2-Bibliotheken setzen
-# os.environ['PATH'] = '/opt/homebrew/bin:' + os.environ.get('PATH', '')
-# os.environ['DYLD_FALLBACK_LIBRARY_PATH'] = '/opt/homebrew/lib'
 
 
 # #
 # Pygame initialization
 # #
-
 
 pygame.init()
 font_path = "/System/Library/Fonts/Geneva.ttf"  # macOS
@@ -115,7 +102,6 @@ while True:
                 y = board.level -1
             board.active_box.y = y
         if event.key == pygame.K_SPACE:
-            print("SPACE")
             board.set_selected_box(board.active_box)
             
 
@@ -145,19 +131,7 @@ while True:
         last_mouse_pos = current_mouse_pos  # Aktuelle Position speichern
 
     
-    # active_x, active_y, active_z = active_box
     board.draw(screen, angles)
-    # Befüllen mit Box-Objekten
-    # for z in range(ROWS):
-    #     for y in range(LEVEL):
-    #         for x in range(COLUMNS):
-
-    #             box = board[z][y][x]
-    #             box.is_active = False
-    #             if active_x == x and active_y == y and active_z == z:
-    #                 box.is_active = True
-    #             box.draw(screen, FOV, DISTANCE, angles)
-                
     
     fps = int(fpsClock.get_fps())
     fps_text = font.render(f"FPS: {fps}, FOV: {FOV}, DISTANCE: {DISTANCE}, ROT_X:{int(angles[0])}, ROT_Y:{int(angles[1])}", True, (255, 255, 255))

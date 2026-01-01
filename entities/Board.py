@@ -1,7 +1,9 @@
 import pygame
 from entities.box import Box
+from entities.team import Team
 from entities.figures.pawn import Pawn
 from entities.figures.king import King
+
 from settings import *
 
 class Board:
@@ -71,26 +73,29 @@ class Board:
                     box.draw(screen, FOV, DISTANCE, angles)
     
     def init_figures(self):
-        pawn = Pawn(self, self.board[1][3][0])
-        pawn = Pawn(self, self.board[1][3][1])
-        pawn = Pawn(self, self.board[1][3][2])
-        pawn = Pawn(self, self.board[1][3][3])
-        pawn = Pawn(self, self.board[1][3][4])
-        pawn = Pawn(self, self.board[1][3][5])
-        pawn = Pawn(self, self.board[1][3][6])
-        pawn = Pawn(self, self.board[1][3][7])
+        team_white = Team(TEAM_WHITE)
+        team_black = Team(TEAM_BLACK)
+
+        pawn = Pawn(self, self.board[1][3][0], team_white)
+        pawn = Pawn(self, self.board[1][3][1], team_white)
+        pawn = Pawn(self, self.board[1][3][2], team_white)
+        pawn = Pawn(self, self.board[1][3][3], team_white)
+        pawn = Pawn(self, self.board[1][3][4], team_white)
+        pawn = Pawn(self, self.board[1][3][5], team_white)
+        pawn = Pawn(self, self.board[1][3][6], team_white)
+        pawn = Pawn(self, self.board[1][3][7], team_white)
         
 
-        pawn = Pawn(self, self.board[6][3][0])
-        pawn = Pawn(self, self.board[6][3][1])
-        pawn = Pawn(self, self.board[6][3][2])
-        pawn = Pawn(self, self.board[6][3][3])
-        pawn = Pawn(self, self.board[6][3][4])
-        pawn = Pawn(self, self.board[6][3][5])
-        pawn = Pawn(self, self.board[6][3][6])
-        pawn = Pawn(self, self.board[6][3][7])
+        pawn = Pawn(self, self.board[6][3][0], team_black)
+        pawn = Pawn(self, self.board[6][3][1], team_black)
+        pawn = Pawn(self, self.board[6][3][2], team_black)
+        pawn = Pawn(self, self.board[6][3][3], team_black)
+        pawn = Pawn(self, self.board[6][3][4], team_black)
+        pawn = Pawn(self, self.board[6][3][5], team_black)
+        pawn = Pawn(self, self.board[6][3][6], team_black)
+        pawn = Pawn(self, self.board[6][3][7], team_black)
 
-        king = King(self, self.board[0][3][3])
-        king = King(self, self.board[7][3][3])
+        king = King(self, self.board[0][3][3], team_white)
+        king = King(self, self.board[7][3][3], team_black)
         
                     

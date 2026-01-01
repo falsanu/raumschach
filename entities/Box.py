@@ -114,9 +114,11 @@ class Box:
             True,
             (255, 255, 255)
         )
-        # 3. Zeichne den Text auf das transparente Surface
-        # text_surface.blit(box_text, (0, 0))
-        # text_surface.set_alpha(128)  # 10 = ~4% Transparenz (0=unsichtbar, 255=undurchsichtig)
 
-        # text_rect = text_surface.get_rect(center=(int(projected_center.x), int(projected_center.y)))
-        # screen.blit(text_surface, text_rect)
+        if DEBUG:
+            # 3. Zeichne den Text auf das transparente Surface
+            text_surface.blit(box_text, (0, 0))
+            text_surface.set_alpha(128)  # 10 = ~4% Transparenz (0=unsichtbar, 255=undurchsichtig)
+
+            text_rect = text_surface.get_rect(center=(int(projected_center.x), int(projected_center.y)))
+            screen.blit(text_surface, text_rect)

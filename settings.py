@@ -11,3 +11,7 @@ COLUMNS = 8 # left - right
 SIZE = 15
 Y_SPACING = 0
 BOX_SPACING = 5
+
+DEBUG = False
+TEAM_BLACK = 0
+TEAM_WHITE = 1

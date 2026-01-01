@@ -2,8 +2,8 @@ from entities.figures.figure import Figure
 import pygame.math
 
 class King(Figure):
-    def __init__(self, board, box):
-        super().__init__(board, box)
+    def __init__(self, board, box, team):
+        super().__init__(board, box, team)
         self.type = "King"
         self.movement_vector = []
     
