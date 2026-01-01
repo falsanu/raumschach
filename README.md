@@ -12,11 +12,11 @@ a 3d chess game
   - [ ] Queen
   - [ ] Bishop
   - [ ] Knight
+- [x] select single field
   
 Choose wisely:
 - [ ] create Teams
 - [ ] create inital setup
-- [ ] select single field
 - [ ] make moves
 - [ ] hit opponents figures
  
