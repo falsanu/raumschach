@@ -4,6 +4,7 @@ from entities.team import Team
 from entities.figures.pawn import Pawn
 from entities.figures.king import King
 from entities.figures.bishop import Bishop
+from entities.figures.knight import Knight
 
 from settings import *
 
@@ -97,6 +98,11 @@ class Board:
         King(self, self.board[0][3][3], TEAM_WHITE)
         King(self, self.board[7][3][3], TEAM_BLACK)
         
+
         Bishop(self, self.board[4][3][4], TEAM_WHITE)
 
-                    
+        Knight(self, self.board[0][3][1], TEAM_WHITE)
+        Knight(self, self.board[0][3][6], TEAM_WHITE)
+        Knight(self, self.board[7][3][1], TEAM_WHITE)
+        Knight(self, self.board[7][3][6], TEAM_WHITE)            
+        
