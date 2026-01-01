@@ -10,7 +10,7 @@ class Board:
         self.level = level
         self.columns = columns
 
-        self.active_box = pygame.math.Vector3(0,0,0)
+        self.active_box = pygame.math.Vector3(0,3,0)
         self.selected_box:Box = None 
         
 
@@ -71,11 +71,26 @@ class Board:
                     box.draw(screen, FOV, DISTANCE, angles)
     
     def init_figures(self):
-        pawn = Pawn(self.board, self.board[1][4][4])
+        pawn = Pawn(self, self.board[1][3][0])
+        pawn = Pawn(self, self.board[1][3][1])
+        pawn = Pawn(self, self.board[1][3][2])
+        pawn = Pawn(self, self.board[1][3][3])
+        pawn = Pawn(self, self.board[1][3][4])
+        pawn = Pawn(self, self.board[1][3][5])
+        pawn = Pawn(self, self.board[1][3][6])
+        pawn = Pawn(self, self.board[1][3][7])
         
-        #pawn.show_possible_hit_fields()
 
-        king = King(self.board, self.board[3][3][3])
-        #king.show_possible_target_fields()
-        #king.show_possible_hit_fields()
+        pawn = Pawn(self, self.board[6][3][0])
+        pawn = Pawn(self, self.board[6][3][1])
+        pawn = Pawn(self, self.board[6][3][2])
+        pawn = Pawn(self, self.board[6][3][3])
+        pawn = Pawn(self, self.board[6][3][4])
+        pawn = Pawn(self, self.board[6][3][5])
+        pawn = Pawn(self, self.board[6][3][6])
+        pawn = Pawn(self, self.board[6][3][7])
+
+        king = King(self, self.board[0][3][3])
+        king = King(self, self.board[7][3][3])
+        
                     
