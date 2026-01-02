@@ -1,6 +1,7 @@
 # Raumschach
 a 3d chess game build in python with pygame
 
+<img src="images/screenshot.png">
 
 ## Installation
 
