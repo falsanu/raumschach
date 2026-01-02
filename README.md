@@ -1,12 +1,31 @@
-# raumschach
-a 3d chess game
+# Raumschach
+a 3d chess game build in python with pygame
 
-## todo:
+
+## Installation
+
+```bash
+  git clone repogit@github.com:falsanu/raumschach.git
+  cd raumschach
+  python3.12 -m venv venv
+  source venv/bin/activate
+  python3 raumschach.py
+```
+
+
+## Todo:
+
+Choose wisely:
+- [ ] make only possible clickable!
+- [ ] create Teams
+- [ ] hit opponents figures
+
+## Done:
 
 - [x] generate 3d projection
 - [x] generate board
 - [x] display possible fields
-- [ ] create figures 
+- [x] create figures 
   - [x] Pawn
   - [x] King
   - [x] Queen
@@ -17,11 +36,12 @@ a 3d chess game
 - [x] make moves
 - [x] set Default screens
   
-Choose wisely:
-- [ ] make only possible clickable!
-- [ ] create Teams
 
+ ### Contribution
+ very welcome!!!
 
-- [ ] hit opponents figures
- 
- 
+### 
+done @39C3 with Beer + Tschunk and [@jonaspews](https://github.com/jonaspews)
+
+ ### LICENSE 
+ MIT 2026
