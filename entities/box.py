@@ -32,14 +32,16 @@ class Box:
             (4, 5), (5, 6), (6, 7), (7, 4),  # Rückseite
             (0, 7), (1, 4), (2, 5), (3, 6)   # Verbindungen
         ]
+        
         self.color = color
         self.initial_color = color
+
         self.is_active = False
-        
+        self.is_highlighted = False
         
         self.font = pygame.font.SysFont("Arial", 10)
 
-        self.is_highlighted = False
+        
 
     def set_figure(self, figure):
         self.figure = figure
@@ -64,13 +66,18 @@ class Box:
         center_3d /= len(projected)  # Durchschnitt aller Eckpunkte
         return center_3d
     
+
+    
     def highlight(self, color):
         self.is_highlighted = True
         self.color = color
     
     def un_highlight(self):
         self.is_highlighted = False
-        self.color = self.initial_color
+        if self.figure != None:
+            self.color = self.figure.get_color()
+        else:
+            self.color = self.initial_color
 
     def draw(self, screen, fov, distance, angles):
         # 1. Punkte rotieren und projizieren
@@ -105,17 +112,31 @@ class Box:
             distance
         )
 
-        text_surface = pygame.Surface((120, 20), pygame.SRCALPHA)  # Größe anpassen
-        text_surface.fill((0, 0, 0, 0))  # Vollständig transparenter Hintergrund
-        
-        # 5. Text mittig platzieren (jetzt korrekt im 3D-Raum)
-        box_text = self.font.render(
-            f"E:{int(self.orig_vector.y)+1}, {number_to_char(int(self.orig_vector.x))}, {int(self.orig_vector.z)+1}",
-            True,
-            (255, 255, 255)
-        )
 
+
+        
+        text_surface = pygame.Surface((self.size, 20), pygame.SRCALPHA)  # Größe anpassen
+        text_surface.fill((0, 0, 0, 0))  # Vollständig transparenter Hintergrund
+        if self.figure != None:
+            box_text = self.font.render(
+                    f"{self.figure.label}",
+                    True,
+                    (255, 255, 255)
+                )
+            text_surface.blit(box_text, (0, 0))
+            text_surface.set_alpha(255)  # 10 = ~4% Transparenz (0=unsichtbar, 255=undurchsichtig)
+
+            text_rect = text_surface.get_rect(center=(int(projected_center.x), int(projected_center.y)))
+            screen.blit(text_surface, text_rect)
+            
         if DEBUG:
+            # 5. Text mittig platzieren (jetzt korrekt im 3D-Raum)
+            box_text = self.font.render(
+                f"E:{int(self.orig_vector.y)+1}, {number_to_char(int(self.orig_vector.x))}, {int(self.orig_vector.z)+1}",
+                True,
+                (255, 255, 255)
+            )
+
             # 3. Zeichne den Text auf das transparente Surface
             text_surface.blit(box_text, (0, 0))
             text_surface.set_alpha(128)  # 10 = ~4% Transparenz (0=unsichtbar, 255=undurchsichtig)

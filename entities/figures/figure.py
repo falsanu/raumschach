@@ -4,19 +4,28 @@ from abc import ABC, abstractmethod
 
 class Figure(ABC):
     def __init__(self, board, box, team):
-        self.board:Board = board
+        self.board = board
         self.box = box
         self.box.figure = self
         self.team = team
         self.movement_vector = []
         self.hit_vector = []
+        
     
+    def get_color(self):
+        if self.team == TEAM_WHITE:
+            return (255,255,0)
+        else:
+            return (255,0,255)
 
     def highlight_box(self):
         if self.team == TEAM_WHITE:
             self.box.highlight((255,255,0))
-        if self.team == TEAM_BLACK:
+        else:
             self.box.highlight((255,0,255))
+    
+    def un_highlight_box(self):
+            self.box.highlight(self.box.initial_color)
 
     @abstractmethod
     def get_target_fields(self):
@@ -53,4 +62,6 @@ class Figure(ABC):
                 if self.board.board[int(z)][int(y)][int(x)] != self.box:
                     self.board.board[int(z)][int(y)][int(x)].un_highlight()
         self.highlight_box()
-            
+    
+    def __str__(self):
+        return f"Figure(name={self.name}, type={self.type})"

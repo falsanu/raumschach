@@ -11,7 +11,8 @@ from entities.board import Board
 # #
 
 pygame.init()
-font = pygame.font.SysFont("Arial", 10)
+font = pygame.font.SysFont("Apple Color Emoji", 100)
+
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.get_surface().set_alpha(None)  # Alpha-Blending einschalten
@@ -45,12 +46,14 @@ while True:
         exit
     
     if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_ESCAPE:
+        if event.key == pygame.K_TAB:
             angles = [
                 math.radians(30),  # X-Achse: 30° nach unten geneigt
                 math.radians(45),  # Y-Achse: 45° gedreht
                 0                  # Z-Achse: keine Rotation
             ]
+        if event.key == pygame.K_ESCAPE:
+            board.unselect_box()
         if event.key == pygame.K_LSHIFT:
             shift_pressed = True
     
@@ -126,7 +129,9 @@ while True:
     if mousedown and last_mouse_pos is not None:
         current_mouse_pos = pygame.mouse.get_pos()
         delta_x = current_mouse_pos[0] - last_mouse_pos[0]
+        # delta_y = current_mouse_pos[0] - last_mouse_pos[0]
         angles[1] += math.radians(delta_x * -0.3)  # Flüssige Rotation basierend auf Mausbewegung
+        # angles[0] += math.radians(delta_y * -0.3)  # Flüssige Rotation basierend auf Mausbewegung
         last_mouse_pos = current_mouse_pos  # Aktuelle Position speichern
 
     
