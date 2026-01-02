@@ -10,7 +10,12 @@ a 3d chess game build in python with pygame
   cd raumschach
   python3.12 -m venv venv
   source venv/bin/activate
-  python3 raumschach.py
+  pip install -r ./requirements.txt
+```
+
+run raumschach with 
+```bash
+python3 raumschach.py
 ```
 
 
