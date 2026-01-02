@@ -5,6 +5,8 @@ from entities.figures.pawn import Pawn
 from entities.figures.king import King
 from entities.figures.bishop import Bishop
 from entities.figures.knight import Knight
+from entities.figures.rook import Rook
+from entities.figures.queen import Queen
 
 from settings import *
 
