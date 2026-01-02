@@ -36,7 +36,7 @@ angles = [
 # #
 mousedown = False
 shift_pressed = False
-
+opposite_view = False
 while True:
     event = pygame.event.poll()
     screen.fill((0,0,0))
@@ -47,6 +47,32 @@ while True:
     
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_TAB:
+            opposite_view = False
+            angles = [
+                math.radians(30),  # X-Achse: 30° nach unten geneigt
+                math.radians(45),  # Y-Achse: 45° gedreht
+                0                  # Z-Achse: keine Rotation
+            ]
+        if event.key == pygame.K_1:
+            opposite_view = True
+            angles = [
+                math.radians(30),  # X-Achse: 30° nach unten geneigt
+                math.radians(225),  # Y-Achse: 45° gedreht
+                0                  # Z-Achse: keine Rotation
+            ]
+        if event.key == pygame.K_2:
+            angles = [
+                math.radians(30),  # X-Achse: 30° nach unten geneigt
+                math.radians(135),  # Y-Achse: 45° gedreht
+                0                  # Z-Achse: keine Rotation
+            ]
+        if event.key == pygame.K_3:
+            angles = [
+                math.radians(30),  # X-Achse: 30° nach unten geneigt
+                math.radians(180),  # Y-Achse: 45° gedreht
+                0                  # Z-Achse: keine Rotation
+            ]
+        if event.key == pygame.K_4:
             angles = [
                 math.radians(30),  # X-Achse: 30° nach unten geneigt
                 math.radians(45),  # Y-Achse: 45° gedreht
@@ -62,33 +88,63 @@ while True:
             shift_pressed = False
 
         if event.key == pygame.K_d:
-            x,y,z = board.active_box
-            x+=1
-            if x > board.columns -1:
-                x = 0
-            
-            board.active_box.x = x
+            if opposite_view == True:
+                x,y,z = board.active_box
+                x-=1
+                if x < 0:
+                    x = board.columns - 1
+                board.active_box.x = x
+            else:
+                x,y,z = board.active_box
+                x+=1
+                if x > board.columns -1:
+                    x = 0
+                
+                board.active_box.x = x
             
         if event.key == pygame.K_a:
-            x,y,z = board.active_box
-            x-=1
-            if x < 0:
-                x = board.columns - 1
-            board.active_box.x = x
+            if opposite_view == True:
+                x,y,z = board.active_box
+                x+=1
+                if x > board.columns -1:
+                    x = 0
+                
+                board.active_box.x = x            
+            else:
+                x,y,z = board.active_box
+                x-=1
+                if x < 0:
+                    x = board.columns - 1
+                board.active_box.x = x
 
         if event.key == pygame.K_s:
-            x,y,z = board.active_box
-            z-=1
-            if z < 0:
-                z = board.rows - 1
-            board.active_box.z = z
+            if opposite_view == True:
+                x,y,z = board.active_box
+                z+=1
+                if z > board.rows - 1:
+                    z = 0
+                board.active_box.z = z
+            else:
+
+                x,y,z = board.active_box
+                z-=1
+                if z < 0:
+                    z = board.rows - 1
+                board.active_box.z = z
 
         if event.key == pygame.K_w:
-            x,y,z = board.active_box
-            z+=1
-            if z > board.rows - 1:
-                z = 0
-            board.active_box.z = z
+            if opposite_view == True:
+                x,y,z = board.active_box
+                z-=1
+                if z < 0:
+                    z = board.rows - 1
+                board.active_box.z = z
+            else:
+                x,y,z = board.active_box
+                z+=1
+                if z > board.rows - 1:
+                    z = 0
+                board.active_box.z = z
         
         if event.key == pygame.K_e:
             x,y,z = board.active_box

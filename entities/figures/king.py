@@ -46,4 +46,4 @@ class King(Figure):
 
         
     def get_target_fields(self):
-            return self.hit_vector
+            return self.hit_vector + self.movement_vector

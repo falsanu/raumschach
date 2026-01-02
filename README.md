@@ -9,15 +9,19 @@ a 3d chess game
 - [ ] create figures 
   - [x] Pawn
   - [x] King
-  - [ ] Queen
-  - [ ] Bishop
-  - [ ] Knight
+  - [x] Queen
+  - [x] Bishop
+  - [x] Knight
 - [x] select single field
+- [x] create inital setup
+- [x] make moves
+- [x] set Default screens
   
 Choose wisely:
+- [ ] make only possible clickable!
 - [ ] create Teams
-- [ ] create inital setup
-- [ ] make moves
+
+
 - [ ] hit opponents figures
  
  

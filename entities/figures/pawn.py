@@ -44,4 +44,4 @@ class Pawn(Figure):
         self.highlight_box()
     
     def get_target_fields(self):
-            return self.hit_vector
+            return self.movement_vector
