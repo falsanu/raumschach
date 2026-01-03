@@ -8,6 +8,7 @@ class Pawn(Figure):
         self.type = "Pawn"
 
 
+
         self.movement_vector = [
                                 pygame.math.Vector3(0, 1, 0),   # Bewegung eins hoch
                                 pygame.math.Vector3(0, 2, 0),   # Bewegung zwei hoch
@@ -44,4 +45,25 @@ class Pawn(Figure):
         self.highlight_box()
     
     def get_target_fields(self):
-            return self.movement_vector
+            self.movement_vector = [
+                                pygame.math.Vector3(0, 1, 0),   # Bewegung eins hoch
+                                pygame.math.Vector3(0, -1, 0),  # Bewegung eins runter
+                            ]
+            if not self.has_moved:
+                    self.movement_vector.append(pygame.math.Vector3(0, 2, 0))   # Bewegung zwei hoch
+                    self.movement_vector.append(pygame.math.Vector3(0, -2, 0))  # Bewegung zwei runter
+
+        
+            if self.team == TEAM_WHITE:
+                self.movement_vector.append(pygame.math.Vector3(0, 0, 1))   # Bewegung eins vor
+                if not self.has_moved:
+                    self.movement_vector.append(pygame.math.Vector3(0, 0, 2))    # Bewegung zwei vor
+
+            if self.team == TEAM_BLACK:
+                self.movement_vector.append(pygame.math.Vector3(0, 0, -1))   # Bewegung eins vor
+                if not self.has_moved:
+                    self.movement_vector.append(pygame.math.Vector3(0, 0, -2))    # Bewegung zwei vor
+
+
+
+            return self.movement_vector + self.hit_vector

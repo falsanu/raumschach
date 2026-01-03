@@ -16,7 +16,7 @@ class Board:
         self.level = level #y
         self.columns = columns #x
 
-        self.active_box = pygame.math.Vector3(0,3,0)
+        self.active_box = pygame.math.Vector3(3,3,3)
         self.selected_box:Box = None 
         
 
@@ -65,12 +65,27 @@ class Board:
                         figure.hide_possible_target_fields()
                         figure.hide_possible_hit_fields()
                         figure.un_highlight_box()
-                        # self.selected_box.figure.box = next_box
-                        self.selected_box.figure = None
-                        figure.box = next_box
-                        next_box.figure = figure
-                        next_box.figure.highlight_box()
-                        moved = True
+                        
+                        if next_box.figure != None: # zielbox hat eine figur
+                            if next_box.figure.team != figure.team: # vom Gegner
+                                # Check if field is in hit-vector
+                                if field in figure.hit_vector: # is needed for PAWN-Movement, because its different from any other
+                                    print("Real Hit")
+                                    self.selected_box.figure = None
+                                    figure.box = next_box
+                                    figure.has_moved = True
+                                    next_box.figure = figure
+                                    moved = True
+                                    break
+                            else:
+                                print("Same Team, select new field")
+                        else: # ziel box hat keine figur
+                            print("Empty Field")
+                            self.selected_box.figure = None
+                            figure.box = next_box
+                            figure.has_moved = True
+                            next_box.figure = figure
+                            moved = True
 
         self.unselect_box()
 
@@ -78,7 +93,7 @@ class Board:
         if self.selected_box.figure != None:
             if not moved:
                 self.selected_box.figure.show_possible_target_fields()
-                #self.selected_box.figure.show_possible_hit_fields()
+                self.selected_box.figure.show_possible_hit_fields()
     
     def unselect_box(self):
         if self.selected_box != None:
@@ -100,7 +115,8 @@ class Board:
                     box.draw(screen, FOV, DISTANCE, angles)
     
     def init_figures(self):
-#                                   'z''y''x'
+
+#                             'z''y''x'
         Pawn(self, self.board[1][3][0], TEAM_WHITE)
         Pawn(self, self.board[1][3][1], TEAM_WHITE)
         Pawn(self, self.board[1][3][2], TEAM_WHITE)
@@ -140,3 +156,16 @@ class Board:
         
         Rook(self, self.board[7][3][0], TEAM_BLACK)
         Rook(self, self.board[7][3][7], TEAM_BLACK)
+        
+        # # Bishop Test
+        # b = Bishop(self, self.board[3][3][3], TEAM_WHITE)
+        # space = 3
+        # for x,y,z in b.movement_vector:
+        #     Pawn(self, self.board[3+int(x*space)][3+int(y*space)][3+int(z*space)], TEAM_BLACK)    
+        
+        # # Pawn Test
+        # a = Pawn(self, self.board[1][3][3], TEAM_WHITE)
+        # b = Bishop(self, self.board[3][3][4], TEAM_BLACK)
+        # c = Bishop(self, self.board[3][3][2], TEAM_BLACK)
+        
+       

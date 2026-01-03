@@ -11,7 +11,7 @@ from entities.board import Board
 # #
 
 pygame.init()
-font = pygame.font.SysFont("Apple Color Emoji", 100)
+font = pygame.font.SysFont("Arial", 10)
 
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))

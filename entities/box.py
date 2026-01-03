@@ -39,7 +39,7 @@ class Box:
         self.is_active = False
         self.is_highlighted = False
         
-        self.font = pygame.font.SysFont("Arial", 10)
+        self.font = pygame.font.SysFont("Impact", 16)
 
         
 
@@ -121,7 +121,7 @@ class Box:
             box_text = self.font.render(
                     f"{self.figure.label}",
                     True,
-                    (255, 255, 255)
+                    self.figure.get_color()
                 )
             text_surface.blit(box_text, (0, 0))
             text_surface.set_alpha(255)  # 10 = ~4% Transparenz (0=unsichtbar, 255=undurchsichtig)

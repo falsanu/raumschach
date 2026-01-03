@@ -26,6 +26,7 @@ class Rook(Figure):
         # of board or a figure is in line
         
         target_fields = []
+        self.hit_vector = []
 
         for v in self.movement_vector:
 

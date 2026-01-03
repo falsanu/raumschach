@@ -10,6 +10,7 @@ class Figure(ABC):
         self.team = team
         self.movement_vector = []
         self.hit_vector = []
+        self.has_moved = False
         
     
     def get_color(self):
@@ -52,7 +53,7 @@ class Figure(ABC):
             x,y,z = pygame.math.Vector3(x,y,z) + self.box.orig_vector
             if (x >= 0 and x < self.board.columns) and (y >= 0 and y < self.board.level) and (z >= 0 and z < self.board.rows):
                 if self.board.board[int(z)][int(y)][int(x)] != self.box:
-                    self.board.board[int(z)][int(y)][int(x)].highlight((0,255,255))
+                    self.board.board[int(z)][int(y)][int(x)].highlight((255,0,0))
             
     
     def hide_possible_hit_fields(self):
