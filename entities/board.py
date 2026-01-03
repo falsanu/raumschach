@@ -18,6 +18,8 @@ class Board:
 
         self.active_box = pygame.math.Vector3(3,3,3)
         self.selected_box:Box = None 
+
+        self.current_team = TEAM_WHITE
         
 
         self.board = [[[None for _ in range(self.rows)]
@@ -94,6 +96,13 @@ class Board:
             if not moved:
                 self.selected_box.figure.show_possible_target_fields()
                 self.selected_box.figure.show_possible_hit_fields()
+        if moved:
+            if self.current_team == TEAM_WHITE:
+                self.current_team = TEAM_BLACK
+            else:
+                self.current_team = TEAM_WHITE
+            
+
     
     def unselect_box(self):
         if self.selected_box != None:
@@ -112,7 +121,7 @@ class Board:
 
                     if self.active_box.x == x and self.active_box.y == y and self.active_box.z == z:
                         box.is_active = True
-                    box.draw(screen, FOV, DISTANCE, angles)
+                    box.draw(screen, FOV, DISTANCE, angles, self.current_team)
     
     def init_figures(self):
 

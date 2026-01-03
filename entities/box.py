@@ -79,7 +79,7 @@ class Box:
         else:
             self.color = self.initial_color
 
-    def draw(self, screen, fov, distance, angles):
+    def draw(self, screen, fov, distance, angles, current_team):
         # 1. Punkte rotieren und projizieren
         rotated_points = [rotate_point(p, angles) for p in self.get_projected_vertices()]
         projected_points = [
@@ -92,7 +92,12 @@ class Box:
             start = projected_points[start_idx]
             end = projected_points[end_idx]
             if self.is_active:
-                pygame.draw.line(screen, WHITE, (start.x, start.y), (end.x, end.y), 1)
+                color = pygame.Color(0)  # Erstelle ein Color-Objekt (Farbe ist zunächst irrelevant)
+                if current_team == TEAM_WHITE:
+                    color.hsva = (49, 100, 92)  # Setze HSV-Werte (Hue, Saturation, Value, Alpha)
+                else:
+                    color.hsva = (298, 100, 92)  # Setze HSV-Werte (Hue, Saturation, Value, Alpha)
+                pygame.draw.line(screen, color, (start.x, start.y), (end.x, end.y), 1)
             else:
                 pygame.draw.line(screen, self.color, (start.x, start.y), (end.x, end.y), 1)
 

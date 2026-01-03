@@ -209,6 +209,16 @@ while True:
     mouse_x,mouse_y = pygame.mouse.get_pos()
     mouse_text = font.render(f"Mouse_X: {mouse_x}, Mouse_Y: {mouse_y}", True, (255, 255, 255))
     screen.blit(mouse_text, (10, 30))  # Oben links
+    
+    if board.current_team == TEAM_WHITE:
+        team_text = "Team WHITE"
+    else:
+        team_text = "Team BLACK"
+
+    game_infos = font.render(f"Team: {team_text}", True, (255, 255, 255))
+    screen.blit(game_infos, (10, screen.get_width() - 100))  # Oben links
+    
+    
     pygame.display.update()      
     fpsClock.tick(60) #11
 
