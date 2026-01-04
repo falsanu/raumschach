@@ -210,6 +210,18 @@ while True:
     mouse_text = font.render(f"Mouse_X: {mouse_x}, Mouse_Y: {mouse_y}", True, (255, 255, 255))
     screen.blit(mouse_text, (10, 30))  # Oben links
     
+    if board.active_box:
+        sel_box_x,sel_box_y,sel_box_z = board.active_box
+        box_selection_text = font.render(f"Active Box: x: {int(sel_box_x)}, y: {int(sel_box_y)}, z:{int(sel_box_z)}", True, (255, 255, 255))
+        screen.blit(box_selection_text, (10, 50))  # Oben links
+
+    if board.selected_box:
+        sel_box_x,sel_box_y,sel_box_z = board.selected_box.orig_vector
+        box_selection_text = font.render(f"Selected Box: x: {int(sel_box_x)}, y: {int(sel_box_y)}, z:{int(sel_box_z)}", True, (255, 255, 255))
+        screen.blit(box_selection_text, (10, 60))  # Oben links
+
+    
+
     if board.current_team == TEAM_WHITE:
         team_text = "WHITE"
     else:

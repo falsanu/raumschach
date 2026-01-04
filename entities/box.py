@@ -43,7 +43,7 @@ class Box:
             (0, 1, 4, 7),  # Linke Seite (x = -size)
             (3, 2, 5, 6)   # Rechte Seite (x = size)
         ]
-        self.faces = []
+        # self.faces = []
         
         self.color = color
         self.initial_color = color
@@ -112,10 +112,10 @@ class Box:
             
                 color = pygame.Color(0)
                 if current_team == TEAM_WHITE:
-                    color.hsva = (49, 100, 92)  
+                    color.hsla = (49, 100, 80)  
                     color.a = 128 # Alpha-Wert (128 = 50% Transparenz)
                 else:
-                    color.hsva = (298, 100, 92)
+                    color.hsla = (298, 100, 80)
                     color.a = 128 # Alpha-Wert (128 = 50% Transparenz)
 
                 # Polygon auf die transparente Oberfläche zeichnen
@@ -124,7 +124,7 @@ class Box:
                     [(int(p.x), int(p.y)) for p in face_points],  # Punkte als ganzzahlige Koordinaten
                     (color)  # Farbe inkl. Alpha-Wert (als RGBA-Tuple)
                 )
-                # pygame.draw.polygon(face_surface, color, [(p.x, p.y) for p in face_points])
+                pygame.draw.polygon(face_surface, color, [(p.x, p.y) for p in face_points])
 
                 # Oberfläche auf den Bildschirm blitten
                 screen.blit(face_surface, (0, 0))
@@ -136,9 +136,9 @@ class Box:
             if self.is_active:
                 color = pygame.Color(0)  # Erstelle ein Color-Objekt (Farbe ist zunächst irrelevant)
                 if current_team == TEAM_WHITE:
-                    color.hsva = (49, 100, 92)  # Setze HSV-Werte (Hue, Saturation, Value, Alpha)
+                    color.hsla = (49, 100, 80)  # Setze HSV-Werte (Hue, Saturation, Value, Alpha)
                 else:
-                    color.hsva = (298, 100, 92)  # Setze HSV-Werte (Hue, Saturation, Value, Alpha)
+                    color.hsla = (298, 100, 80)  # Setze HSV-Werte (Hue, Saturation, Value, Alpha)
                 pygame.draw.line(screen, color, (start.x, start.y), (end.x, end.y), 1)
                 # pygame.gfxdraw.line(screen, int(start.x), int(start.y), int(end.x), int(end.y), self.color)
             else:

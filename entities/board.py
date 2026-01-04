@@ -92,16 +92,18 @@ class Board:
                         
                         break
             else:
-                print("unhandled else")
-                            
+                print("selected figure from opponent")
 
         self.unselect_box()
 
         self.selected_box:Box = next_box
-        if self.selected_box.figure != None:
+        if self.selected_box.figure != None and self.selected_box.figure.team == self.current_team:
             if not moved:
                 self.selected_box.figure.show_possible_target_fields()
                 self.selected_box.figure.show_possible_hit_fields()
+        else:
+            self.selected_box = None
+        
         if moved:
             if self.current_team == TEAM_WHITE:
                 self.current_team = TEAM_BLACK
