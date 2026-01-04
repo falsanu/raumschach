@@ -1,4 +1,6 @@
 import pygame
+import pygame.gfxdraw # For hardware accellerated drawing
+
 from utilities.matrix_helpers import *
 from utilities.colors import *
 from utilities.tools import *
@@ -32,6 +34,16 @@ class Box:
             (4, 5), (5, 6), (6, 7), (7, 4),  # Rückseite
             (0, 7), (1, 4), (2, 5), (3, 6)   # Verbindungen
         ]
+       
+        self.faces = [
+            (0, 1, 2, 3),  # Vorderseite (z = -size)
+            (7, 6, 5, 4),  # Rückseite (z = size)
+            (0, 3, 6, 7),  # Untere Seite (y = -size)
+            (1, 4, 5, 2),  # Obere Seite (y = size)
+            (0, 1, 4, 7),  # Linke Seite (x = -size)
+            (3, 2, 5, 6)   # Rechte Seite (x = size)
+        ]
+        self.faces = []
         
         self.color = color
         self.initial_color = color
@@ -87,7 +99,37 @@ class Box:
             for p in rotated_points
         ]
 
-        # 2. Kanten zeichnen
+        if self.is_active:
+            # Flächen zeichnen (mit Transparenz)
+            for face in self.faces:
+                # Punkte der Fläche extrahieren
+                face_points = [projected_points[i] for i in face]
+
+                # Transparente Fläche erstellen
+                face_surface = pygame.Surface((screen.get_width(), screen.get_height()), pygame.SRCALPHA)
+
+                # Farbe basierend auf dem Team setzen
+            
+                color = pygame.Color(0)
+                if current_team == TEAM_WHITE:
+                    color.hsva = (49, 100, 92)  
+                    color.a = 128 # Alpha-Wert (128 = 50% Transparenz)
+                else:
+                    color.hsva = (298, 100, 92)
+                    color.a = 128 # Alpha-Wert (128 = 50% Transparenz)
+
+                # Polygon auf die transparente Oberfläche zeichnen
+                pygame.gfxdraw.filled_polygon(
+                    face_surface,
+                    [(int(p.x), int(p.y)) for p in face_points],  # Punkte als ganzzahlige Koordinaten
+                    (color)  # Farbe inkl. Alpha-Wert (als RGBA-Tuple)
+                )
+                # pygame.draw.polygon(face_surface, color, [(p.x, p.y) for p in face_points])
+
+                # Oberfläche auf den Bildschirm blitten
+                screen.blit(face_surface, (0, 0))
+
+        # Kanten zeichnen
         for start_idx, end_idx in self.edges:
             start = projected_points[start_idx]
             end = projected_points[end_idx]
@@ -98,16 +140,18 @@ class Box:
                 else:
                     color.hsva = (298, 100, 92)  # Setze HSV-Werte (Hue, Saturation, Value, Alpha)
                 pygame.draw.line(screen, color, (start.x, start.y), (end.x, end.y), 1)
+                # pygame.gfxdraw.line(screen, int(start.x), int(start.y), int(end.x), int(end.y), self.color)
             else:
                 pygame.draw.line(screen, self.color, (start.x, start.y), (end.x, end.y), 1)
+                # pygame.gfxdraw.line(screen, int(start.x), int(start.y), int(end.x), int(end.y), self.color)
 
-        # 3. Mittelpunkt im 3D-Raum berechnen (vor der Projektion!)
+        # Mittelpunkt im 3D-Raum berechnen (vor der Projektion!)
         center_3d = pygame.math.Vector3(0, 0, 0)
         for p in self.get_projected_vertices():  # Originale 3D-Punkte (mit Offset)
             center_3d += p
         center_3d /= len(self.points)  # Durchschnitt der 3D-Punkte
 
-        # 4. Text-Position rotieren und projizieren
+        # Text-Position rotieren und projizieren
         rotated_center = rotate_point(center_3d, angles)
         projected_center = project_3d_to_2d(
             rotated_center,

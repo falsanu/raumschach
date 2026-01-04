@@ -66,5 +66,5 @@ class Bishop(Figure):
                             # wenn die figur von dem anderen Team ist kann sie geschlagen werden
                             if self.team != box_to_check.figure.team:
                                     self.hit_vector.append(pygame.math.Vector3(int(new_vector.x),int(new_vector.y),int(new_vector.z)))
-                                    break
+                            break
             return target_fields + self.hit_vector

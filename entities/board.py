@@ -37,7 +37,7 @@ class Board:
             for y in range(self.level): #Oben         Y von unten nach oben
                 for x in range(self.columns):       # X von links nach rechts
                     color = pygame.Color(0)  # Erstelle ein Color-Objekt (Farbe ist zunächst irrelevant)
-                    color.hsva = ((y * 360 // self.level) % 360, 100, 40, 50)  # Setze HSV-Werte (Hue, Saturation, Value, Alpha)
+                    color.hsva = ((y * 360 // self.level) % 360, 100, 40, 70)  # Setze HSV-Werte (Hue, Saturation, Value, Alpha)
                     
                     # Box Offset relativ zum Mittelpunkt (da über die Mitte rotiert wird)
                     offset_x = (x - center_x) * (SIZE + BOX_SPACING)/SIZE
@@ -55,7 +55,7 @@ class Board:
         moved = False
         if self.selected_box != None:
             figure = self.selected_box.figure
-            if figure:
+            if figure and figure.team == self.current_team: # allow only selecting figures of currently active team
                 
                 for field in figure.get_target_fields():
                     target_field = field + self.selected_box.orig_vector
@@ -87,7 +87,13 @@ class Board:
                             figure.box = next_box
                             figure.has_moved = True
                             next_box.figure = figure
+                            figure.highlight_box()
                             moved = True
+                        
+                        break
+            else:
+                print("unhandled else")
+                            
 
         self.unselect_box()
 
@@ -109,6 +115,8 @@ class Board:
             if self.selected_box.figure != None:
                 self.selected_box.figure.hide_possible_target_fields()
                 self.selected_box.figure.hide_possible_hit_fields()
+        
+        self.selected_box = None
 
     def draw(self, screen, angles):
         # Befüllen mit Box-Objekten

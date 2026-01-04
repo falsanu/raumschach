@@ -211,12 +211,17 @@ while True:
     screen.blit(mouse_text, (10, 30))  # Oben links
     
     if board.current_team == TEAM_WHITE:
-        team_text = "Team WHITE"
+        team_text = "WHITE"
     else:
-        team_text = "Team BLACK"
+        team_text = "BLACK"
 
-    game_infos = font.render(f"Team: {team_text}", True, (255, 255, 255))
-    screen.blit(game_infos, (10, screen.get_width() - 100))  # Oben links
+    game_font = pygame.font.SysFont("Impact", 60)
+    game_infos = game_font.render(f"{team_text}", True, (255, 255, 255))
+    screen.blit(game_infos, (screen.get_width() - 300, 10))  # Oben rechts
+    
+    game_info_figure_font = pygame.font.SysFont("Impact", 40)
+    game_info_figure = game_info_figure_font.render(f"{board.selected_box.figure.type if board.selected_box and board.selected_box.figure else ''}", True, (255, 255, 255))
+    screen.blit(game_info_figure, (screen.get_width() - 300, 65))  # Oben rechts
     
     
     pygame.display.update()      
