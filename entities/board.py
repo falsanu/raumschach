@@ -109,8 +109,6 @@ class Board:
                 self.current_team = TEAM_BLACK
             else:
                 self.current_team = TEAM_WHITE
-            
-
     
     def unselect_box(self):
         if self.selected_box != None:
