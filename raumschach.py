@@ -47,35 +47,44 @@ while True:
     
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_TAB:
-            opposite_view = False
-            angles = [
-                math.radians(30),  # X-Achse: 30° nach unten geneigt
-                math.radians(45),  # Y-Achse: 45° gedreht
-                0                  # Z-Achse: keine Rotation
-            ]
+            # toggle views    
+            opposite_view = not opposite_view
+
+            if not opposite_view:
+                angles = [
+                    math.radians(30),  # X-Achse: 30° nach unten geneigt
+                    math.radians(45),  # Y-Achse: 45° gedreht
+                    0                  # Z-Achse: keine Rotation
+                ]
+            else:
+                angles = [
+                    math.radians(30),  # X-Achse: 30° nach unten geneigt
+                    math.radians(225),  # Y-Achse: 225° gedreht
+                    0                  # Z-Achse: keine Rotation
+                ]
+
         if event.key == pygame.K_1:
-            opposite_view = True
             angles = [
                 math.radians(30),  # X-Achse: 30° nach unten geneigt
-                math.radians(225),  # Y-Achse: 45° gedreht
+                math.radians(0),  # Y-Achse: 0°° gedreht
                 0                  # Z-Achse: keine Rotation
             ]
         if event.key == pygame.K_2:
             angles = [
                 math.radians(30),  # X-Achse: 30° nach unten geneigt
-                math.radians(135),  # Y-Achse: 45° gedreht
+                math.radians(90),  # Y-Achse: 90° gedreht
                 0                  # Z-Achse: keine Rotation
             ]
         if event.key == pygame.K_3:
             angles = [
                 math.radians(30),  # X-Achse: 30° nach unten geneigt
-                math.radians(180),  # Y-Achse: 45° gedreht
+                math.radians(180),  # Y-Achse: 180° gedreht
                 0                  # Z-Achse: keine Rotation
             ]
         if event.key == pygame.K_4:
             angles = [
                 math.radians(30),  # X-Achse: 30° nach unten geneigt
-                math.radians(45),  # Y-Achse: 45° gedreht
+                math.radians(270),  # Y-Achse: 270° gedreht
                 0                  # Z-Achse: keine Rotation
             ]
         if event.key == pygame.K_ESCAPE:
