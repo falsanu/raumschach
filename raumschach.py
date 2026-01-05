@@ -12,7 +12,9 @@ from entities.ui import Ui
 
 pygame.init()
 
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+# screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT),pygame.RESIZABLE)
 pygame.display.get_surface().set_alpha(None)  # Alpha-Blending einschalten
 
 fpsClock = pygame.time.Clock() #1

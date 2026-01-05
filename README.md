@@ -6,7 +6,8 @@ a 3d chess game build in python with pygame
 ### Requirements
 - Python 3.12
 - venv installed
-- 
+
+
 ## Installation
 
 
@@ -36,7 +37,7 @@ python3 raumschach.py
   - SPACE - Select figure
   - SPACE again - Place figure
   - ESC unselect everything
-  - CTRL-Q to quit
+  - CTRL/CMD-Q to quit
 
 ## Views
   - TAB - to toggle opponents view
@@ -50,7 +51,7 @@ python3 raumschach.py
 
 Choose wisely:
 - [ ] make only possible clickable!
-- [ ] show some stats
+
 
 ## Done:
 
@@ -69,7 +70,7 @@ Choose wisely:
 - [x] set Default screens
 - [x] create Teams
 - [x] hit opponents figures
-
+- [x] show some stats
   
 
  ### Contributions

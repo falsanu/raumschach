@@ -123,9 +123,13 @@ class Ui():
 
         game_font = pygame.font.SysFont("Impact", 60)
         game_infos = game_font.render(f"{team_text}", True, (255, 255, 255))
-        screen.blit(game_infos, (screen.get_width() - 300, 10))  # Oben rechts
+        screen.blit(game_infos, (screen.get_width() - 350, 50))  # Oben rechts
         
         game_info_figure_font = pygame.font.SysFont("Impact", 40)
         game_info_figure = game_info_figure_font.render(f"{self.board.selected_box.figure.type if self.board.selected_box and self.board.selected_box.figure else ''}", True, (255, 255, 255))
-        screen.blit(game_info_figure, (screen.get_width() - 300, 65))  # Oben rechts
+        screen.blit(game_info_figure, (screen.get_width() - 350, 105))  # Oben rechts
             
+        game_info_figure_font = pygame.font.SysFont("Arial", 12)
+        game_credits = game_info_figure_font.render("Raumschach by @falsanu and @jonaspews", True, (255, 255, 255))
+        screen.blit(game_credits, (30, screen.get_height() - 20))  # Oben rechts
+        
