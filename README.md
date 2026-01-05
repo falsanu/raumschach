@@ -50,8 +50,7 @@ python3 raumschach.py
 
 Choose wisely:
 - [ ] make only possible clickable!
-- [ ] create Teams
-- [ ] hit opponents figures
+- [ ] show some stats
 
 ## Done:
 
@@ -68,6 +67,9 @@ Choose wisely:
 - [x] create inital setup
 - [x] make moves
 - [x] set Default screens
+- [x] create Teams
+- [x] hit opponents figures
+
   
 
  ### Contributions
