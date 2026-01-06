@@ -4,6 +4,7 @@ from utilities.matrix_helpers import *
 from utilities.colors import *
 from settings import *
 from entities.board import Board
+from utilities.input_handling import InputHandler
 from entities.ui import Ui
 
 # #
@@ -29,6 +30,7 @@ angles = [
     math.radians(45),  # Y-Achse: 45° gedreht
     0                  # Z-Achse: keine Rotation
 ]
+input_handler = InputHandler(board, angles, ui)
 
 ui = Ui(board)
 
