@@ -68,7 +68,10 @@ while True:
 
         if event.type == MOUSEBUTTONUP:
             input_handler.mouse_button_up()
-            
+        
+        if event.type == pygame.MOUSEMOTION:
+        # Leite die Mausbewegung an den InputHandler weiter
+            input_handler.mouse_motion(event.pos)
 
     input_handler.update()
 

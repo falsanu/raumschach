@@ -14,6 +14,7 @@ class InputHandler:
         self.mousedown = False
         self.shift_pressed = False
         self.opposite_view = False
+        self.dragging = False
 
         self.shift_pressed = False
         self.last_mouse_pos = None
@@ -27,15 +28,37 @@ class InputHandler:
         else:
             settings.DISTANCE+=event.y*10
 
-
+    def mouse_motion(self, mouse_pos):
+        if self.mousedown and not self.dragging:
+            # Optional: Drag-Logik hier einbauen
+            if abs(mouse_pos[0] - self.last_mouse_pos[0]) > 5 or abs(mouse_pos[1] - self.last_mouse_pos[1]) > 5:
+                self.dragging = True
 
     def mouse_button_down(self):
         self.mousedown = True
         self.last_mouse_pos = pygame.mouse.get_pos()  # Startposition speichern
+        self.dragging = False  # Flag für Drag-Vorgang
 
     def mouse_button_up(self):
         self.mousedown = False
-        self.last_mouse_pos = None # Zurücksetzen, wenn die Maustaste losgelassen wird
+        current_mouse_pos = pygame.mouse.get_pos()
+
+        # Prüfe, ob sich die Maus bewegt hat (Drag)
+        if self.last_mouse_pos and (
+            abs(current_mouse_pos[0] - self.last_mouse_pos[0]) > 5 or  # Schwellenwert für Bewegung
+            abs(current_mouse_pos[1] - self.last_mouse_pos[1]) > 5
+        ):
+            self.dragging = True
+
+        self.last_mouse_pos = None
+
+        # Nur auslösen, wenn kein Drag stattfand
+        if not self.dragging:
+            self.get_box_under_cursor()
+
+        # self.mousedown = False
+        # self.last_mouse_pos = None # Zurücksetzen, wenn die Maustaste losgelassen wird
+        # self.get_box_under_cursor()
 
     def key_down(self, event):
         
@@ -53,31 +76,19 @@ class InputHandler:
             self.opposite_view = not self.opposite_view
 
             if not self.opposite_view:
-                # self.angles[0]  =    math.radians(30)  # X-Achse: 30° nach unten geneigt
                 self.angles[1]  =    math.radians(45)  # Y-Achse: 45° gedreht
-                # self.angles[2]  =    0                  # Z-Achse: keine Rotation
             else:
-                # self.angles[0]  =    math.radians(30),  # X-Achse: 30° nach unten geneigt
                 self.angles[1]  =    math.radians(225)  # Y-Achse: 225° gedreht
-                # self.angles[2]  =    0                  # Z-Achse: keine Rotation
             
 
         if event.key == pygame.K_1:
-            # self.angles[0]  =        math.radians(30)  # X-Achse: 30° nach unten geneigt
             self.angles[1]  =        math.radians(0)  # Y-Achse: 0°° gedreht
-            # self.angles[2]  =        0                  # Z-Achse: keine Rotation
         if event.key == pygame.K_2:
-            # self.angles[0]  =        math.radians(30)  # X-Achse: 30° nach unten geneigt
             self.angles[1]  =        math.radians(90)  # Y-Achse: 90° gedreht
-            # self.angles[2]  =        0                  # Z-Achse: keine Rotation
         if event.key == pygame.K_3:
-            # self.angles[0]  =        math.radians(30)  # X-Achse: 30° nach unten geneigt
             self.angles[1]  =        math.radians(180)  # Y-Achse: 180° gedreht
-            # self.angles[2]  =        0                  # Z-Achse: keine Rotation
         if event.key == pygame.K_4:
-            # self.angles[0]  =        math.radians(30)  # X-Achse: 30° nach unten geneigt
             self.angles[1]  =        math.radians(270)  # Y-Achse: 270° gedreht
-            # self.angles[2]  =        0                  # Z-Achse: keine Rotation
         if event.key == pygame.K_ESCAPE:
             self.board.unselect_box()
         
@@ -163,3 +174,29 @@ class InputHandler:
             delta_x = current_mouse_pos[0] - self.last_mouse_pos[0]
             self.angles[1] += math.radians(delta_x * -0.3)  # Flüssige Rotation basierend auf Mausbewegung
             self.last_mouse_pos = current_mouse_pos  # Aktuelle Position speichern
+        
+        box = self.board.get_box_under_mouse(
+            pygame.mouse.get_pos(),
+            self.angles
+        )
+        if box:
+            self.board.active_box = box.orig_vector
+
+
+    def handle_mouse_click(self, mouse_pos):
+        box = self.board.get_box_under_mouse(
+            mouse_pos,
+            self.angles
+        )
+        print(box)
+        if box:
+            self.board.set_selected_box(box.orig_vector)
+            if box.figure:
+                print(f"Box mit Figur ausgewählt: {box.figure.type}")
+            else:
+                print("Leere Box ausgewählt.")
+
+    def get_box_under_cursor(self):
+        # print(pygame.mouse.get_pos())
+        self.handle_mouse_click(pygame.mouse.get_pos())
+

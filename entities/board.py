@@ -7,6 +7,8 @@ from entities.figures.bishop import Bishop
 from entities.figures.knight import Knight
 from entities.figures.rook import Rook
 from entities.figures.queen import Queen
+from utilities.matrix_helpers import rotate_point
+from utilities.matrix_helpers import project_3d_to_2d
 
 import settings
 
@@ -15,7 +17,7 @@ class Board:
         self.rows = rows #z
         self.level = level #y
         self.columns = columns #x
-
+        self.boxes = []
         self.active_box = pygame.math.Vector3(3,3,3)
         self.selected_box:Box = None 
 
@@ -46,7 +48,7 @@ class Board:
                     
                     # Box platzieren
                     self.board[z][y][x] = Box(offset_x, offset_y, offset_z, settings.SIZE, color, pygame.math.Vector3(x,y,z))
-        
+                    self.boxes.append(self.board[z][y][x])
         self.init_figures()
     
     def set_selected_box(self, box:pygame.math.Vector3):
@@ -117,6 +119,57 @@ class Board:
                 self.selected_box.figure.hide_possible_hit_fields()
         
         self.selected_box = None
+
+
+    def get_box_under_mouse(self, mouse_pos, view_angle):
+        """
+        Gibt die Box unter den Mauskoordinaten zurück.
+
+        :param mouse_pos: (x, y) Mausposition auf dem Bildschirm
+        :param view_angle: Aktueller Blickwinkel (Rotation des Boards)
+        :param fov: Field of View (Sichtfeld)
+        :param viewer_distance: Abstand des Betrachters zum Board
+        :return: Box-Objekt oder None
+        """
+
+        
+        mouse_x, mouse_y = mouse_pos
+        print(view_angle)
+        target_fields = []
+
+        if self.selected_box != None:
+            figure = self.selected_box.figure
+            if figure and figure.team == self.current_team: # allow only selecting figures of currently active team
+                for field in figure.get_target_fields():
+                    target_fields.append(field + self.selected_box.orig_vector)
+
+
+         
+        for box in self.boxes:
+
+            if box.figure != None or box.orig_vector in target_fields:
+                # Projiziere alle 8 Eckpunkte der Box auf 2D
+                box_2d_points = []
+                for corner in box.get_projected_vertices():
+                    # Rotieren und projizieren
+                    rotated = rotate_point(corner, view_angle)
+                    projected = project_3d_to_2d(rotated, settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT, settings.FOV, settings.DISTANCE)
+                    box_2d_points.append(projected)
+
+                # print(f"Box {box.coordinates} projizierte Punkte: {box_2d_points}")
+                # Bestimme den 2D-Bounding-Box der projizierten Box
+                min_x = min(p[0] for p in box_2d_points)
+                max_x = max(p[0] for p in box_2d_points)
+                min_y = min(p[1] for p in box_2d_points)
+                max_y = max(p[1] for p in box_2d_points)
+
+                print(mouse_pos)
+                print(f"Bounding-Box: ({min_x}, {min_y}) bis ({max_x}, {max_y})")
+                # Prüfe, ob der Mauszeiger innerhalb der Bounding-Box liegt
+                if (min_x <= mouse_x <= max_x) and (min_y <= mouse_y <= max_y):
+                    box.is_active = True
+                    return box
+        return None
 
     def draw(self, screen, angles):
         # Befüllen mit Box-Objekten
