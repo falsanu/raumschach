@@ -4,17 +4,17 @@ from utilities.matrix_helpers import *
 from utilities.colors import *
 from settings import *
 from entities.board import Board
-
+from entities.ui import Ui
 
 # #
 # Pygame initialization
 # #
 
 pygame.init()
-font = pygame.font.SysFont("Arial", 10)
 
+# screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT),pygame.RESIZABLE)
 pygame.display.get_surface().set_alpha(None)  # Alpha-Blending einschalten
 
 fpsClock = pygame.time.Clock() #1
@@ -30,6 +30,7 @@ angles = [
     0                  # Z-Achse: keine Rotation
 ]
 
+ui = Ui(board)
 
 # #
 # Key Flag Initialisierung
@@ -201,40 +202,7 @@ while True:
 
     
     board.draw(screen, angles)
-    
-    fps = int(fpsClock.get_fps())
-    fps_text = font.render(f"FPS: {fps}, FOV: {FOV}, DISTANCE: {DISTANCE}, ROT_X:{int(angles[0])}, ROT_Y:{int(angles[1])}", True, (255, 255, 255))
-    screen.blit(fps_text, (10, 10))  # Oben links
-    
-    mouse_x,mouse_y = pygame.mouse.get_pos()
-    mouse_text = font.render(f"Mouse_X: {mouse_x}, Mouse_Y: {mouse_y}", True, (255, 255, 255))
-    screen.blit(mouse_text, (10, 30))  # Oben links
-    
-    if board.active_box:
-        sel_box_x,sel_box_y,sel_box_z = board.active_box
-        box_selection_text = font.render(f"Active Box: x: {int(sel_box_x)}, y: {int(sel_box_y)}, z:{int(sel_box_z)}", True, (255, 255, 255))
-        screen.blit(box_selection_text, (10, 50))  # Oben links
-
-    if board.selected_box:
-        sel_box_x,sel_box_y,sel_box_z = board.selected_box.orig_vector
-        box_selection_text = font.render(f"Selected Box: x: {int(sel_box_x)}, y: {int(sel_box_y)}, z:{int(sel_box_z)}", True, (255, 255, 255))
-        screen.blit(box_selection_text, (10, 60))  # Oben links
-
-    
-
-    if board.current_team == TEAM_WHITE:
-        team_text = "WHITE"
-    else:
-        team_text = "BLACK"
-
-    game_font = pygame.font.SysFont("Impact", 60)
-    game_infos = game_font.render(f"{team_text}", True, (255, 255, 255))
-    screen.blit(game_infos, (screen.get_width() - 300, 10))  # Oben rechts
-    
-    game_info_figure_font = pygame.font.SysFont("Impact", 40)
-    game_info_figure = game_info_figure_font.render(f"{board.selected_box.figure.type if board.selected_box and board.selected_box.figure else ''}", True, (255, 255, 255))
-    screen.blit(game_info_figure, (screen.get_width() - 300, 65))  # Oben rechts
-    
+    ui.draw(screen, angles)
     
     pygame.display.update()      
     fpsClock.tick(60) #11
