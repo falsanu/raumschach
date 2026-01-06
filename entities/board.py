@@ -8,7 +8,7 @@ from entities.figures.knight import Knight
 from entities.figures.rook import Rook
 from entities.figures.queen import Queen
 
-from settings import *
+import settings
 
 class Board:
     def __init__(self, rows, level, columns):
@@ -19,12 +19,12 @@ class Board:
         self.active_box = pygame.math.Vector3(3,3,3)
         self.selected_box:Box = None 
 
-        self.current_team = TEAM_WHITE
+        self.current_team = settings.TEAM_WHITE
         
 
         self.board = [[[None for _ in range(self.rows)]
-             for _ in range(self.level)]
-            for _ in range(self.columns)]
+                        for _ in range(self.level)]
+                            for _ in range(self.columns)]
         
         # Mittelpunkt des Boards berechnen
         center_x = (self.columns - 1) / 2  # Mitte der Spalten (X-Achse)
@@ -40,12 +40,12 @@ class Board:
                     color.hsva = ((y * 360 // self.level) % 360, 100, 40, 70)  # Setze HSV-Werte (Hue, Saturation, Value, Alpha)
                     
                     # Box Offset relativ zum Mittelpunkt (da über die Mitte rotiert wird)
-                    offset_x = (x - center_x) * (SIZE + BOX_SPACING)/SIZE
-                    offset_y = (y - center_y) * ((SIZE + BOX_SPACING)/SIZE) * (SIZE + Y_SPACING)/SIZE
-                    offset_z = (z - center_z) * (SIZE + BOX_SPACING)/SIZE
+                    offset_x = (x - center_x) * (settings.SIZE + settings.BOX_SPACING)/settings.SIZE
+                    offset_y = (y - center_y) * ((settings.SIZE + settings.BOX_SPACING)/settings.SIZE) * (settings.SIZE + settings.Y_SPACING)/settings.SIZE
+                    offset_z = (z - center_z) * (settings.SIZE + settings.BOX_SPACING)/settings.SIZE
                     
                     # Box platzieren
-                    self.board[z][y][x] = Box(offset_x, offset_y, offset_z, SIZE, color, pygame.math.Vector3(x,y,z))
+                    self.board[z][y][x] = Box(offset_x, offset_y, offset_z, settings.SIZE, color, pygame.math.Vector3(x,y,z))
         
         self.init_figures()
     
@@ -105,10 +105,10 @@ class Board:
             self.selected_box = None
         
         if moved:
-            if self.current_team == TEAM_WHITE:
-                self.current_team = TEAM_BLACK
+            if self.current_team == settings.TEAM_WHITE:
+                self.current_team = settings.TEAM_BLACK
             else:
-                self.current_team = TEAM_WHITE
+                self.current_team = settings.TEAM_WHITE
     
     def unselect_box(self):
         if self.selected_box != None:
@@ -129,60 +129,60 @@ class Board:
 
                     if self.active_box.x == x and self.active_box.y == y and self.active_box.z == z:
                         box.is_active = True
-                    box.draw(screen, FOV, DISTANCE, angles, self.current_team)
+                    box.draw(screen, settings.FOV, settings.DISTANCE, angles, self.current_team)
     
     def init_figures(self):
 
 #                             'z''y''x'
-        Pawn(self, self.board[1][3][0], TEAM_WHITE)
-        Pawn(self, self.board[1][3][1], TEAM_WHITE)
-        Pawn(self, self.board[1][3][2], TEAM_WHITE)
-        Pawn(self, self.board[1][3][3], TEAM_WHITE)
-        Pawn(self, self.board[1][3][4], TEAM_WHITE)
-        Pawn(self, self.board[1][3][5], TEAM_WHITE)
-        Pawn(self, self.board[1][3][6], TEAM_WHITE)
-        Pawn(self, self.board[1][3][7], TEAM_WHITE)
+        Pawn(self, self.board[1][3][0], settings.TEAM_WHITE)
+        Pawn(self, self.board[1][3][1], settings.TEAM_WHITE)
+        Pawn(self, self.board[1][3][2], settings.TEAM_WHITE)
+        Pawn(self, self.board[1][3][3], settings.TEAM_WHITE)
+        Pawn(self, self.board[1][3][4], settings.TEAM_WHITE)
+        Pawn(self, self.board[1][3][5], settings.TEAM_WHITE)
+        Pawn(self, self.board[1][3][6], settings.TEAM_WHITE)
+        Pawn(self, self.board[1][3][7], settings.TEAM_WHITE)
         
 
-        Pawn(self, self.board[6][3][0], TEAM_BLACK)
-        Pawn(self, self.board[6][3][1], TEAM_BLACK)
-        Pawn(self, self.board[6][3][2], TEAM_BLACK)
-        Pawn(self, self.board[6][3][3], TEAM_BLACK)
-        Pawn(self, self.board[6][3][4], TEAM_BLACK)
-        Pawn(self, self.board[6][3][5], TEAM_BLACK)
-        Pawn(self, self.board[6][3][6], TEAM_BLACK)
-        Pawn(self, self.board[6][3][7], TEAM_BLACK)
+        Pawn(self, self.board[6][3][0], settings.TEAM_BLACK)
+        Pawn(self, self.board[6][3][1], settings.TEAM_BLACK)
+        Pawn(self, self.board[6][3][2], settings.TEAM_BLACK)
+        Pawn(self, self.board[6][3][3], settings.TEAM_BLACK)
+        Pawn(self, self.board[6][3][4], settings.TEAM_BLACK)
+        Pawn(self, self.board[6][3][5], settings.TEAM_BLACK)
+        Pawn(self, self.board[6][3][6], settings.TEAM_BLACK)
+        Pawn(self, self.board[6][3][7], settings.TEAM_BLACK)
 
-        King(self, self.board[0][3][3], TEAM_WHITE)
-        Queen(self, self.board[0][3][4], TEAM_WHITE)
-        King(self, self.board[7][3][3], TEAM_BLACK)
-        Queen(self, self.board[7][3][4], TEAM_BLACK)
+        King(self, self.board[0][3][3], settings.TEAM_WHITE)
+        Queen(self, self.board[0][3][4], settings.TEAM_WHITE)
+        King(self, self.board[7][3][3], settings.TEAM_BLACK)
+        Queen(self, self.board[7][3][4], settings.TEAM_BLACK)
 
-        Bishop(self, self.board[0][3][2], TEAM_WHITE)
-        Bishop(self, self.board[0][3][5], TEAM_WHITE)
-        Bishop(self, self.board[7][3][2], TEAM_BLACK)
-        Bishop(self, self.board[7][3][5], TEAM_BLACK)
+        Bishop(self, self.board[0][3][2], settings.TEAM_WHITE)
+        Bishop(self, self.board[0][3][5], settings.TEAM_WHITE)
+        Bishop(self, self.board[7][3][2], settings.TEAM_BLACK)
+        Bishop(self, self.board[7][3][5], settings.TEAM_BLACK)
         
-        Knight(self, self.board[0][3][1], TEAM_WHITE)
-        Knight(self, self.board[0][3][6], TEAM_WHITE)
-        Knight(self, self.board[7][3][1], TEAM_BLACK)
-        Knight(self, self.board[7][3][6], TEAM_BLACK)            
+        Knight(self, self.board[0][3][1], settings.TEAM_WHITE)
+        Knight(self, self.board[0][3][6], settings.TEAM_WHITE)
+        Knight(self, self.board[7][3][1], settings.TEAM_BLACK)
+        Knight(self, self.board[7][3][6], settings.TEAM_BLACK)            
 
-        Rook(self, self.board[0][3][0], TEAM_WHITE)
-        Rook(self, self.board[0][3][7], TEAM_WHITE)
+        Rook(self, self.board[0][3][0], settings.TEAM_WHITE)
+        Rook(self, self.board[0][3][7], settings.TEAM_WHITE)
         
-        Rook(self, self.board[7][3][0], TEAM_BLACK)
-        Rook(self, self.board[7][3][7], TEAM_BLACK)
+        Rook(self, self.board[7][3][0], settings.TEAM_BLACK)
+        Rook(self, self.board[7][3][7], settings.TEAM_BLACK)
         
         # # Bishop Test
-        # b = Bishop(self, self.board[3][3][3], TEAM_WHITE)
+        # b = Bishop(self, self.board[3][3][3], settings.TEAM_WHITE)
         # space = 3
         # for x,y,z in b.movement_vector:
-        #     Pawn(self, self.board[3+int(x*space)][3+int(y*space)][3+int(z*space)], TEAM_BLACK)    
+        #     Pawn(self, self.board[3+int(x*space)][3+int(y*space)][3+int(z*space)], settings.TEAM_BLACK)    
         
         # # Pawn Test
-        # a = Pawn(self, self.board[1][3][3], TEAM_WHITE)
-        # b = Bishop(self, self.board[3][3][4], TEAM_BLACK)
-        # c = Bishop(self, self.board[3][3][2], TEAM_BLACK)
+        # a = Pawn(self, self.board[1][3][3], settings.TEAM_WHITE)
+        # b = Bishop(self, self.board[3][3][4], settings.TEAM_BLACK)
+        # c = Bishop(self, self.board[3][3][2], settings.TEAM_BLACK)
         
        
