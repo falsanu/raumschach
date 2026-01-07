@@ -1,5 +1,5 @@
 import pygame
-from settings import *
+import settings 
 from utilities.matrix_helpers import project_3d_to_2d, rotate_point
 
 class Ui():
@@ -9,7 +9,7 @@ class Ui():
         self.small_font = pygame.font.SysFont("Arial", 10)
         self.label_font = pygame.font.SysFont("Impact", 20)
         self.points = []
-        self.size = (SIZE*1.1+BOX_SPACING) * board.rows
+        self.size = (settings.SIZE*1.1+settings.BOX_SPACING) * board.rows
         
         self.points.append(pygame.math.Vector3(-(self.size),-(self.size),-(self.size)))
         self.points.append(pygame.math.Vector3(-(self.size),(self.size),-(self.size)))
@@ -26,13 +26,14 @@ class Ui():
             (4, 5), (5, 6), (6, 7), # Rückseite
             (0, 7), (1, 4), (2, 5),    # Verbindungen
         ]
+        self.fpsClock = pygame.time.Clock() #1
         
     def position_labels(self, screen, angles):
         active_x, active_y, active_z = self.board.active_box
 
         # Farbe basierend auf dem aktuellen Team setzen
         active_color = pygame.Color(0)
-        if self.board.current_team == TEAM_WHITE:
+        if self.board.current_team == settings.TEAM_WHITE:
             active_color.hsla = (49, 100, 80)  # HSLA inkl. Alpha
         else:
             active_color.hsla = (298, 100, 80)  # HSLA inkl. Alpha
@@ -44,29 +45,29 @@ class Ui():
         def draw_label(i, axis_position_func, axis_active_value, label_func):
             p = axis_position_func(i)
             rotated_point = rotate_point(p, angles)
-            projected_point = project_3d_to_2d(rotated_point, screen.get_width(), screen.get_height(), FOV, DISTANCE)
+            projected_point = project_3d_to_2d(rotated_point, screen.get_width(), screen.get_height(), settings.FOV, settings.DISTANCE)
             color = active_color if i == axis_active_value else default_color
             label_text = self.label_font.render(label_func(i), True, color)
             screen.blit(label_text, (projected_point.x, projected_point.y))
 
         # X-Ebene (A-H)
         def x_position(i):
-            x = (i * ((SIZE + BOX_SPACING) * 2)) - self.size + SIZE * 2
-            y = self.size - (SIZE * 0.9 + BOX_SPACING)
-            z = -self.size - (SIZE * 0.9 + BOX_SPACING)
+            x = (i * ((settings.SIZE + settings.BOX_SPACING) * 2)) - self.size + settings.SIZE * 2
+            y = self.size - (settings.SIZE * 0.9 + settings.BOX_SPACING)
+            z = -self.size - (settings.SIZE * 0.9 + settings.BOX_SPACING)
             return pygame.math.Vector3(x, y, z)
 
         # Y- und Z-Ebene (1-8)
         def y_position(i):
-            x = -self.size - (SIZE * 0.9 + BOX_SPACING)
-            y = (self.size - (i * ((SIZE + BOX_SPACING) * 2))) - SIZE * 2
-            z = -self.size - (SIZE * 0.9 + BOX_SPACING)
+            x = -self.size - (settings.SIZE * 0.9 + settings.BOX_SPACING)
+            y = (self.size - (i * ((settings.SIZE + settings.BOX_SPACING) * 2))) - settings.SIZE * 2
+            z = -self.size - (settings.SIZE * 0.9 + settings.BOX_SPACING)
             return pygame.math.Vector3(x, y, z)
 
         def z_position(i):
-            x = -self.size - (SIZE * 0.9 + BOX_SPACING)
-            y = self.size - (SIZE * 0.9 + BOX_SPACING)
-            z = (i * ((SIZE + BOX_SPACING) * 2)) - self.size + SIZE * 2
+            x = -self.size - (settings.SIZE * 0.9 + settings.BOX_SPACING)
+            y = self.size - (settings.SIZE * 0.9 + settings.BOX_SPACING)
+            z = (i * ((settings.SIZE + settings.BOX_SPACING) * 2)) - self.size + settings.SIZE * 2
             return pygame.math.Vector3(x, y, z)
 
         # X-Ebene: A-H
@@ -83,7 +84,7 @@ class Ui():
     def draw(self, screen, angles):
         rotated_points = [rotate_point(p, angles) for p in self.points]
         projected_points = [
-            project_3d_to_2d(p, screen.get_width(), screen.get_height(), FOV, DISTANCE)
+            project_3d_to_2d(p, screen.get_width(), screen.get_height(), settings.FOV, settings.DISTANCE)
             for p in rotated_points
         ]
         
@@ -98,9 +99,9 @@ class Ui():
                 # pygame.gfxdraw.line(screen, int(start.x), int(start.y), int(end.x), int(end.y), self.color)
 
         self.position_labels(screen, angles)
-        # fps = int(fpsClock.get_fps())
-        # fps_text = font.render(f"FPS: {fps}, FOV: {FOV}, DISTANCE: {DISTANCE}, ROT_X:{int(angles[0])}, ROT_Y:{int(angles[1])}", True, (255, 255, 255))
-        # screen.blit(fps_text, (10, 10))  # Oben links
+        fps = int(self.fpsClock.get_fps())
+        fps_text = self.small_font.render(f"FPS: {fps}, FOV: {settings.FOV}, DISTANCE: {settings.DISTANCE}, ROT_X:{int(angles[0])}, ROT_Y:{int(angles[1])}", True, (255, 255, 255))
+        screen.blit(fps_text, (10, 10))  # Oben links
         
         mouse_x,mouse_y = pygame.mouse.get_pos()
         mouse_text = self.small_font.render(f"Mouse_X: {mouse_x}, Mouse_Y: {mouse_y}", True, (255, 255, 255))
@@ -116,7 +117,7 @@ class Ui():
             box_selection_text = self.small_font.render(f"Selected Box: x: {int(sel_box_x)}, y: {int(sel_box_y)}, z:{int(sel_box_z)}", True, (255, 255, 255))
             screen.blit(box_selection_text, (10, 60))  # Oben links
 
-        if self.board.current_team == TEAM_WHITE:
+        if self.board.current_team == settings.TEAM_WHITE:
             team_text = "WHITE"
         else:
             team_text = "BLACK"
@@ -133,3 +134,4 @@ class Ui():
         game_credits = game_info_figure_font.render("Raumschach by @falsanu and @jonaspews", True, (255, 255, 255))
         screen.blit(game_credits, (30, screen.get_height() - 20))  # Oben rechts
         
+        self.fpsClock.tick(60) #11
