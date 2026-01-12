@@ -87,9 +87,6 @@ class Ui():
             project_3d_to_2d(p, screen.get_width(), screen.get_height(), settings.FOV, settings.DISTANCE)
             for p in rotated_points
         ]
-        
-
-
 
         # Kanten zeichnen
         for start_idx, end_idx in self.edges:
@@ -117,10 +114,7 @@ class Ui():
             box_selection_text = self.small_font.render(f"Selected Box: x: {int(sel_box_x)}, y: {int(sel_box_y)}, z:{int(sel_box_z)}", True, (255, 255, 255))
             screen.blit(box_selection_text, (10, 60))  # Oben links
 
-        if self.board.current_team == settings.TEAM_WHITE:
-            team_text = "WHITE"
-        else:
-            team_text = "BLACK"
+        team_text = "WHITE" if self.board.current_team == settings.TEAM_WHITE else "BLACK"
 
         game_font = pygame.font.SysFont("Impact", 60)
         game_infos = game_font.render(f"{team_text}", True, (255, 255, 255))
@@ -134,4 +128,4 @@ class Ui():
         game_credits = game_info_figure_font.render("Raumschach by @falsanu and @jonaspews", True, (255, 255, 255))
         screen.blit(game_credits, (30, screen.get_height() - 20))  # Oben rechts
         
-        self.fpsClock.tick(60) #11
+        self.fpsClock.tick(60) 

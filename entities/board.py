@@ -107,10 +107,10 @@ class Board:
             self.selected_box = None
         
         if moved:
-            if self.current_team == settings.TEAM_WHITE:
-                self.current_team = settings.TEAM_BLACK
-            else:
-                self.current_team = settings.TEAM_WHITE
+            self.current_team = settings.TEAM_BLACK if self.current_team == settings.TEAM_WHITE else settings.TEAM_WHITE
+            
+            self.selected_box = None
+            self.active_box = None
     
     def unselect_box(self):
         if self.selected_box != None:
@@ -134,7 +134,6 @@ class Board:
 
         
         mouse_x, mouse_y = mouse_pos
-        print(view_angle)
         target_fields = []
 
         if self.selected_box != None:
@@ -163,8 +162,6 @@ class Board:
                 min_y = min(p[1] for p in box_2d_points)
                 max_y = max(p[1] for p in box_2d_points)
 
-                print(mouse_pos)
-                print(f"Bounding-Box: ({min_x}, {min_y}) bis ({max_x}, {max_y})")
                 # Prüfe, ob der Mauszeiger innerhalb der Bounding-Box liegt
                 if (min_x <= mouse_x <= max_x) and (min_y <= mouse_y <= max_y):
                     box.is_active = True

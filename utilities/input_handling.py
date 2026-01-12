@@ -30,7 +30,6 @@ class InputHandler:
 
     def mouse_motion(self, mouse_pos):
         if self.mousedown and not self.dragging:
-            # Optional: Drag-Logik hier einbauen
             if abs(mouse_pos[0] - self.last_mouse_pos[0]) > 5 or abs(mouse_pos[1] - self.last_mouse_pos[1]) > 5:
                 self.dragging = True
 
@@ -56,9 +55,6 @@ class InputHandler:
         if not self.dragging:
             self.get_box_under_cursor()
 
-        # self.mousedown = False
-        # self.last_mouse_pos = None # Zurücksetzen, wenn die Maustaste losgelassen wird
-        # self.get_box_under_cursor()
 
     def key_down(self, event):
         

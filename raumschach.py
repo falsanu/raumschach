@@ -75,12 +75,10 @@ while True:
 
     input_handler.update()
 
-    
     board.draw(screen, angles)
     ui.draw(screen, angles)
     
     pygame.display.update()      
-    
 
 pygame.quit()
 
