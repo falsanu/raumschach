@@ -53,6 +53,7 @@ class Box:
         
         self.font = pygame.font.SysFont("Impact", 16)
 
+        self.projected = self.get_projected_vertices()
         
 
     def set_figure(self, figure):
@@ -69,13 +70,11 @@ class Box:
         return projected
     
     def get_projected_center(self):
-        projected = self.get_projected_vertices()
-
         # Mittelpunkt der 3D-Punkte (vor der Projektion)
         center_3d = pygame.math.Vector3(0, 0, 0)
-        for p in projected:
+        for p in self.projected:
             center_3d += p
-        center_3d /= len(projected)  # Durchschnitt aller Eckpunkte
+        center_3d /= len(self.projected)  # Durchschnitt aller Eckpunkte
         return center_3d
     
 
@@ -93,7 +92,7 @@ class Box:
 
     def draw(self, screen, fov, distance, angles, current_team):
         # 1. Punkte rotieren und projizieren
-        rotated_points = [rotate_point(p, angles) for p in self.get_projected_vertices()]
+        rotated_points = [rotate_point(p, angles) for p in self.projected]
         projected_points = [
             project_3d_to_2d(p, screen.get_width(), screen.get_height(), fov, distance)
             for p in rotated_points
@@ -147,7 +146,7 @@ class Box:
 
         # Mittelpunkt im 3D-Raum berechnen (vor der Projektion!)
         center_3d = pygame.math.Vector3(0, 0, 0)
-        for p in self.get_projected_vertices():  # Originale 3D-Punkte (mit Offset)
+        for p in self.projected:  # Originale 3D-Punkte (mit Offset)
             center_3d += p
         center_3d /= len(self.points)  # Durchschnitt der 3D-Punkte
 
