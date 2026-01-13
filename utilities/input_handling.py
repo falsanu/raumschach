@@ -155,6 +155,13 @@ class InputHandler:
                 y = 0
             self.board.active_box.y = y
         
+        if event.key == pygame.K_v:
+            print("v pressed")
+            if self.board.no_visibility == True:
+                self.board.no_visibility = False
+            else:
+                self.board.no_visibility = True
+
         if event.key == pygame.K_q:
             x,y,z = self.board.active_box
             y-=1

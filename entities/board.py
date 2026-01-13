@@ -21,7 +21,7 @@ class Board:
         self.active_box = pygame.math.Vector3(3,3,3)
         self.selected_box:Box = None 
 
-        self.no_visibility = NO_VISIBILITY
+        self.no_visibility = settings.NO_VISIBILITY
         self.current_team = settings.TEAM_WHITE
         
 
