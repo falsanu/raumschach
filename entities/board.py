@@ -20,7 +20,7 @@ class Board:
         self.selected_box:Box = None 
 
         self.current_team = TEAM_WHITE
-        
+        self.no_visibility = NO_VISIBILITY
 
         self.board = [[[None for _ in range(self.rows)]
              for _ in range(self.level)]
@@ -126,11 +126,15 @@ class Board:
 
                     box = self.board[z][y][x]
                     box.is_active = False
-
+                    
                     if self.active_box.x == x and self.active_box.y == y and self.active_box.z == z:
                         box.is_active = True
-                    box.draw(screen, FOV, DISTANCE, angles, self.current_team)
-    
+                    if self.no_visibility != False:  # User schaltet leere Boxen auf Unsichtbar
+                        if self.board[z][y][y].figure != None or box.is_active:
+                            box.draw(screen, FOV, DISTANCE, angles, self.current_team)
+                    else:
+                        box.draw(screen, FOV, DISTANCE, angles, self.current_team)
+
     def init_figures(self):
 
 #                             'z''y''x'
@@ -143,7 +147,6 @@ class Board:
         Pawn(self, self.board[1][3][6], TEAM_WHITE)
         Pawn(self, self.board[1][3][7], TEAM_WHITE)
         
-
         Pawn(self, self.board[6][3][0], TEAM_BLACK)
         Pawn(self, self.board[6][3][1], TEAM_BLACK)
         Pawn(self, self.board[6][3][2], TEAM_BLACK)

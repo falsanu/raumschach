@@ -112,7 +112,7 @@ class Box:
             
                 color = pygame.Color(0)
                 if current_team == TEAM_WHITE:
-                    color.hsla = (49, 100, 80)  
+                    color.hsla = (49, 100, 80)
                     color.a = 128 # Alpha-Wert (128 = 50% Transparenz)
                 else:
                     color.hsla = (298, 100, 80)

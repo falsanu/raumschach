@@ -38,6 +38,7 @@ ui = Ui(board)
 mousedown = False
 shift_pressed = False
 opposite_view = False
+
 while True:
     event = pygame.event.poll()
     screen.fill((0,0,0))
@@ -93,9 +94,27 @@ while True:
         if event.key == pygame.K_LSHIFT:
             shift_pressed = True
     
+    # First Version: Solange v-Taste gedrückt wird, verschwindet das Schachraster 
+    # TODO: siehe Fehler Second Version
+    keys = pygame.key.get_pressed()
+    board.no_visibility = False
+    if keys[pygame.K_v]:
+        board.no_visibility = True
+
     if event.type == pygame.KEYUP:
         if event.key == pygame.K_LSHIFT:
             shift_pressed = False
+ 
+        '''
+        Second Version: Das Raster soll die ganze Zeit verschwinden. 
+        
+        TODO: Funktoniert nur richtig, wenn Grundformation steht. Bei gezogenen Figuren, werden bisher noch andere (grüne) Boxen gezeichnet.
+        '''
+        #if event.key == pygame.K_v:
+         #   if board.no_visibility == True:
+          #      board.no_visibility = False
+           # else:
+            #    board.no_visibility = True
 
         if event.key == pygame.K_d:
             if opposite_view == True:
