@@ -180,12 +180,12 @@ class Board:
                     
                     if self.active_box.x == x and self.active_box.y == y and self.active_box.z == z:
                         box.is_active = True
-                    # if self.no_visibility != False:  # User schaltet leere Boxen auf Unsichtbar
-                    #     if self.board[z][y][y].figure != None or box.is_active:
-                    #         box.draw(screen, settings.FOV, settings.DISTANCE, angles, self.current_team)
-                    # else:
-                    #     box.draw(screen, settings.FOV, settings.DISTANCE, angles, self.current_team)
-                    box.draw(screen, settings.FOV, settings.DISTANCE, angles, self.current_team)
+                    if self.no_visibility != False:  # User schaltet leere Boxen auf Unsichtbar
+                        if self.board[z][y][y].figure != None or box.is_active:
+                            box.draw(screen, settings.FOV, settings.DISTANCE, angles, self.current_team)
+                    else:
+                         box.draw(screen, settings.FOV, settings.DISTANCE, angles, self.current_team)
+                    #box.draw(screen, settings.FOV, settings.DISTANCE, angles, self.current_team)
                     
     
     def init_figures(self):
