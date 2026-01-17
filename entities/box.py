@@ -12,6 +12,10 @@ class Box:
     Box which defines one three dimensional box
     """
     def __init__(self, x, y, z, size, color, orig_vector, figure=None):
+        self.x = x
+        self.y = y
+        self.z = z
+
         self.points = []
         self.points.append(pygame.math.Vector3(-(size),-(size),-(size)))
         self.points.append(pygame.math.Vector3(-(size),(size),-(size)))
@@ -38,8 +42,8 @@ class Box:
         self.faces = [
             (0, 1, 2, 3),  # Vorderseite (z = -size)
             (7, 6, 5, 4),  # Rückseite (z = size)
-            (0, 3, 6, 7),  # Untere Seite (y = -size)
-            (1, 4, 5, 2),  # Obere Seite (y = size)
+            (0, 3, 6, 7),  # Obere Seite (y = -size)
+            (1, 4, 5, 2),  # Untere Seite (y = size)
             (0, 1, 4, 7),  # Linke Seite (x = -size)
             (3, 2, 5, 6)   # Rechte Seite (x = size)
         ]
@@ -98,6 +102,29 @@ class Box:
             for p in rotated_points
         ]
 
+        # floor_points = [projected_points[i] for i in self.faces[3]]
+        # # Transparente Fläche erstellen
+        # floor_surface = pygame.Surface((screen.get_width(), screen.get_height()), pygame.SRCALPHA)
+        #
+        # # Checker
+        # color = pygame.Color(0)
+        # if (self.x + self.y + self.z) % 2:
+        #     color.hsla = (49, 100, 100)
+        #     color.a = 128  # Alpha-Wert (128 = 50% Transparenz)
+        # else:
+        #     color.hsla = (298, 100, 20)
+        #     color.a = 128  # Alpha-Wert (128 = 50% Transparenz)
+        #
+        # pygame.gfxdraw.filled_polygon(
+        #     floor_surface,
+        #     [(int(p.x), int(p.y)) for p in floor_points],  # Punkte als ganzzahlige Koordinaten
+        #     (color)  # Farbe inkl. Alpha-Wert (als RGBA-Tuple)
+        # )
+        # pygame.draw.polygon(floor_surface, color, [(p.x, p.y) for p in floor_points])
+        #
+        # # Oberfläche auf den Bildschirm blitten
+        # screen.blit(floor_surface, (0, 0))
+
         if self.is_active:
             # Flächen zeichnen (mit Transparenz)
             for face in self.faces:
@@ -108,10 +135,10 @@ class Box:
                 face_surface = pygame.Surface((screen.get_width(), screen.get_height()), pygame.SRCALPHA)
 
                 # Farbe basierend auf dem Team setzen
-            
+
                 color = pygame.Color(0)
                 if current_team == TEAM_WHITE:
-                    color.hsla = (49, 100, 80)  
+                    color.hsla = (49, 100, 80)
                     color.a = 128 # Alpha-Wert (128 = 50% Transparenz)
                 else:
                     color.hsla = (298, 100, 80)
@@ -176,7 +203,7 @@ class Box:
 
             text_rect = text_surface.get_rect(center=(int(projected_center.x), int(projected_center.y)))
             screen.blit(text_surface, text_rect)
-            
+
         if DEBUG:
             # 5. Text mittig platzieren (jetzt korrekt im 3D-Raum)
             box_text = self.font.render(
