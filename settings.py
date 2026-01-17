@@ -10,7 +10,7 @@ COLUMNS = 8 # left - right      X
 
 SIZE = 15
 Y_SPACING = 0
-BOX_SPACING = 5
+BOX_SPACING = 10
 
 DEBUG = False
 TEAM_BLACK = 0

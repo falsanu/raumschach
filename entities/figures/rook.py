@@ -45,4 +45,4 @@ class Rook(Figure):
                         if self.team != box_to_check.figure.team:
                                 self.hit_vector.append(pygame.math.Vector3(int(new_vector.x),int(new_vector.y),int(new_vector.z)))
                         break
-        return target_fields
+        return target_fields + self.hit_vector
