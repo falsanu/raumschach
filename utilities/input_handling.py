@@ -162,6 +162,23 @@ class InputHandler:
             else:
                 self.board.no_visibility = True
 
+        if event.key == pygame.K_PLUS:
+            if self.board.box_spacing >= 0:
+                self.board.box_spacing += 1
+                print("increase box_spacing")
+                print(self.board.box_spacing)
+            else:
+                pass
+
+        if event.key == pygame.K_MINUS:
+            if self.board.box_spacing == 0:
+                pass
+            else:
+                self.board.box_spacing -= 1
+                print(self.board.box_spacing)
+                print("decrease box_spacing")
+
+
         if event.key == pygame.K_q:
             x,y,z = self.board.active_box
             y-=1

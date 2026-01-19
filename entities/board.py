@@ -23,6 +23,7 @@ class Board:
 
         self.no_visibility = settings.NO_VISIBILITY
         self.current_team = settings.TEAM_WHITE
+        self.box_spacing = settings.BOX_SPACING
         
 
         self.board = [[[None for _ in range(self.rows)]
@@ -43,10 +44,14 @@ class Board:
                     color.hsva = ((y * 360 // self.level) % 360, 100, 40, 70)  # Setze HSV-Werte (Hue, Saturation, Value, Alpha)
                     
                     # Box Offset relativ zum Mittelpunkt (da über die Mitte rotiert wird)
+                    offset_x = (x - center_x) * (settings.SIZE + self.box_spacing)/settings.SIZE
+                    offset_y = (y - center_y) * ((settings.SIZE + self.box_spacing)/settings.SIZE) * (settings.SIZE + settings.Y_SPACING)/settings.SIZE
+                    offset_z = (z - center_z) * (settings.SIZE + self.box_spacing)/settings.SIZE
+                    '''
                     offset_x = (x - center_x) * (settings.SIZE + settings.BOX_SPACING)/settings.SIZE
                     offset_y = (y - center_y) * ((settings.SIZE + settings.BOX_SPACING)/settings.SIZE) * (settings.SIZE + settings.Y_SPACING)/settings.SIZE
                     offset_z = (z - center_z) * (settings.SIZE + settings.BOX_SPACING)/settings.SIZE
-                    
+                    '''
                     # Box platzieren
                     self.board[z][y][x] = Box(offset_x, offset_y, offset_z, settings.SIZE, color, pygame.math.Vector3(x,y,z))
                     self.boxes.append(self.board[z][y][x])
