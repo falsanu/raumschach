@@ -192,7 +192,9 @@ class InputHandler:
         if self.mousedown and self.last_mouse_pos is not None:
             current_mouse_pos = pygame.mouse.get_pos()
             delta_x = current_mouse_pos[0] - self.last_mouse_pos[0]
+            delta_y = current_mouse_pos[1] - self.last_mouse_pos[1]
             self.angles[1] += math.radians(delta_x * -0.3)  # Flüssige Rotation basierend auf Mausbewegung
+            # self.angles[2] += math.radians(delta_y * -0.3)  # Flüssige Rotation basierend auf Mausbewegung
             self.last_mouse_pos = current_mouse_pos  # Aktuelle Position speichern
         
         box = self.board.get_box_under_mouse(
